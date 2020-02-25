@@ -9,6 +9,44 @@ GO
 CREATE DATABASE StepComputerAcademy
 GO
 
+CREATE TABLE Subjects
+(
+	Id bigint NOT NULL PRIMARY KEY,
+	Name nvarchar(50) NOT NULL
+)
+GO
+
+CREATE TABLE Specializations
+(
+	Id bigint NOT NULL PRIMARY KEY,
+	Name nvarchar(50) NOT NULL,
+)
+GO
+
+CREATE TABLE Groups
+(
+	Id bigint NOT NULL PRIMARY KEY,
+	Name nvarchar(50) NOT NULL,
+	SpecializationFk bigint
+
+	FOREIGN KEY (SpecializationFk) REFERENCES Specializations(Id)
+	ON DELETE CASCADE
+	ON UPDATE CASCADE
+)
+GO
+
+CREATE TABLE Students
+(
+	Id bigint NOT NULL PRIMARY KEY,
+	FullName nvarchar(50) NOT NULL,
+	GroupFk bigint
+
+	FOREIGN KEY (GroupFk) REFERENCES Groups(Id)
+	ON DELETE CASCADE
+	ON UPDATE CASCADE
+)
+GO
+
 CREATE TABLE Teachers
 (
 	Id bigint NOT NULL PRIMARY KEY,
@@ -18,13 +56,6 @@ CREATE TABLE Teachers
 	FOREIGN KEY (StudentFk) REFERENCES Students(Id)
 	    ON DELETE CASCADE
         ON UPDATE CASCADE
-)
-GO
-
-CREATE TABLE Subjects
-(
-	Id bigint NOT NULL PRIMARY KEY,
-	Name nvarchar(50) NOT NULL
 )
 GO
 
@@ -43,37 +74,6 @@ CREATE TABLE TeachersAndSubjects
 )
 GO
 
-CREATE TABLE Students
-(
-	Id bigint NOT NULL PRIMARY KEY,
-	FullName nvarchar(50) NOT NULL,
-	GroupFk bigint
-
-	FOREIGN KEY (GroupFk) REFERENCES Groups(Id)
-	ON DELETE CASCADE
-	ON UPDATE CASCADE
-)
-GO
-
-CREATE TABLE Groups
-(
-	Id bigint NOT NULL PRIMARY KEY,
-	Name nvarchar(50) NOT NULL,
-	SpecializationFk bigint
-
-	FOREIGN KEY (SpecializationFk) REFERENCES Specializations(Id)
-	ON DELETE CASCADE
-	ON UPDATE CASCADE
-)
-GO
-
-CREATE TABLE Specializations
-(
-	Id bigint NOT NULL PRIMARY KEY,
-	Name nvarchar(50) NOT NULL,
-)
-GO
-
 CREATE TABLE Schedules
 (
 	TeacherAndSubjectFk bigint,
@@ -88,7 +88,6 @@ CREATE TABLE Schedules
         ON UPDATE NO ACTION
 )
 GO
-
 
 INSERT INTO Specializations VALUES (1, 'Программирование')
 INSERT INTO Specializations VALUES (2, 'Дизайн')
