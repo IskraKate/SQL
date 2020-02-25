@@ -9,6 +9,9 @@ GO
 CREATE DATABASE StepComputerAcademy
 GO
 
+USE StepComputerAcademy
+GO
+
 CREATE TABLE Subjects
 (
 	Id bigint NOT NULL PRIMARY KEY,
