@@ -54,9 +54,9 @@ CREATE TABLE Teachers
 (
 	Id bigint NOT NULL PRIMARY KEY,
 	FullName nvarchar(50) NOT NULL,
-	StudentFk bigint,
+	GroupFk bigint,
 
-	FOREIGN KEY (StudentFk) REFERENCES Students(Id)
+	FOREIGN KEY (GroupFk) REFERENCES Groups(Id)
 	    ON DELETE CASCADE
         ON UPDATE CASCADE
 )
