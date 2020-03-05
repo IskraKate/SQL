@@ -15,14 +15,14 @@ GO
 CREATE TABLE Genres
 (
 	Id bigint PRIMARY KEY NOT NULL,
-	Name nvarchar(50) NOT NULL
+	[Name] nvarchar(50) NOT NULL
 )
 GO
 
 CREATE TABLE Sections
 (
 	Id bigint PRIMARY KEY NOT NULL,
-	Name nvarchar(50) NOT NULL
+	[Name] nvarchar(50) NOT NULL
 )
 GO
 
@@ -65,7 +65,7 @@ GO
 CREATE TABLE PublishHouses
 (
 	Id bigint PRIMARY KEY NOT NULL,
-	Name nvarchar(50),
+	[Name] nvarchar(50),
 	CityFk bigint,
 
 	FOREIGN KEY (CityFk) REFERENCES Cities(Id)
@@ -261,8 +261,8 @@ INSERT INTO BooksSales VALUES(4, 3, 2, 1, 3)
 INSERT INTO BooksSales VALUES(5, 4, 5, 4, 5)
 GO
 
-SELECT Title, Authors.FullName AS 'Authors Full Name', PublishHouses.Name AS 'Publish House',
-Sections.Name AS 'Section', Genres.Name AS 'Genre',  BooksSales.SoldBooks AS 'Sold Books',
+SELECT Title, Authors.FullName AS 'Authors Full Name', PublishHouses.[Name] AS 'Publish House',
+Sections.[Name] AS 'Section', Genres.[Name] AS 'Genre',  BooksSales.SoldBooks AS 'Sold Books',
 Sellers.FullNAme AS 'Seller`s Name', Buyers.FullName AS 'Buyer`s Name', Cities.Name AS 'City', PhoneNumbers.Number
 FROM Books, Authors, PublishHouses, Sections, Genres, BooksSales, SectionsAndGenres, Buyers, Sellers, Cities, PhoneNumbers
 WHERE BooksSales.BookFk = Books.Id AND
