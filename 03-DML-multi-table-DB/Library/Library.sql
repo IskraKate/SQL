@@ -341,8 +341,8 @@ INSERT Libs (Id, FirstName, LastName) VALUES (2, N'Дмитрий', N'Чеботарев')
 GO
 
 INSERT StudentCards (Id, StudentFk, BookFk, DateOut, DateIn, LibFk) VALUES (1, 2, 1, CAST(N'2001-05-17' AS date), CAST(N'2001-06-12' AS date), 1)
-INSERT StudentCards (Id, StudentFk, BookFk, DateOut, DateIn, LibFk) VALUES (2, 17, 18, CAST(N'2000-05-18' AS date), NULL, 1)
-INSERT StudentCards (Id, StudentFk, BookFk, DateOut, DateIn, LibFk) VALUES (3, 6, 3, CAST(N'2001-04-21' AS date), NULL, 2)
+INSERT StudentCards (Id, StudentFk, BookFk, DateOut, DateIn, LibFk) VALUES (2, 17, 18, CAST(N'2000-05-18' AS date), CAST(N'2000-07-19' AS date), 2)
+INSERT StudentCards (Id, StudentFk, BookFk, DateOut, DateIn, LibFk) VALUES (3, 6, 3, CAST(N'2001-04-21' AS date), CAST(N'2001-06-22' AS date), 1)
 INSERT StudentCards (Id, StudentFk, BookFk, DateOut, DateIn, LibFk) VALUES (4, 21, 4, CAST(N'2001-03-26' AS date), NULL, 2)
 INSERT StudentCards (Id, StudentFk, BookFk, DateOut, DateIn, LibFk) VALUES (5, 3, 1, CAST(N'2000-05-07' AS date), CAST(N'2001-04-12' AS date), 1)
 INSERT StudentCards (Id, StudentFk, BookFk, DateOut, DateIn, LibFk) VALUES (6, 7, 11, CAST(N'2001-06-02' AS date), NULL, 2)
@@ -430,17 +430,18 @@ AND StudentCards.BookFk IN
  --   Используйте функции DATEDIFF и CAST.
 
 SELECT Students.FirstName, StudentCards.DateOut, StudentCards.DateIn,
-((DATEDIFF(week, StudentCards.DateOut, StudentCards.DateIn)-4)*0.25) AS 'Beer', t.[Summary Beer]
+((DATEDIFF(week, StudentCards.DateOut, StudentCards.DateIn)-4)*0.25) AS 'Beer', t.[Summary Beer], Libs.FirstName, Libs.LastName
 FROM 
 (SELECT CAST(SUM(((DATEDIFF(week, StudentCards.DateOut, StudentCards.DateIn)-4)*0.25)) AS NUMERIC) AS 'Summary Beer'
-FROM Students, StudentCards
-WHERE StudentCards.StudentFk = Students.Id 
+FROM Students, StudentCards, Libs
+WHERE StudentCards.StudentFk = Students.Id AND Libs.Id = StudentCards.LibFk AND Libs.FirstName = 'Сергей' AND Libs.LastName = 'Максименко'
 AND DATEDIFF(month, StudentCards.DateOut, StudentCards.DateIn) > 1)t,
 Students,
-StudentCards
-WHERE StudentCards.StudentFk = Students.Id 
+StudentCards,
+Libs
+WHERE StudentCards.StudentFk = Students.Id AND Libs.Id = StudentCards.LibFk AND Libs.FirstName = 'Сергей' AND Libs.LastName = 'Максименко'
 AND DATEDIFF(month, StudentCards.DateOut, StudentCards.DateIn) > 1
-GROUP BY Students.FirstName, StudentCards.DateOut, StudentCards.DateIn, t.[Summary Beer]
+GROUP BY Students.FirstName, StudentCards.DateOut, StudentCards.DateIn, t.[Summary Beer], Libs.FirstName, Libs.LastName
 
 SELECT CAST(SUM(((DATEDIFF(week, StudentCards.DateOut, StudentCards.DateIn)-4)*0.25)) AS NUMERIC) AS 'Summary Beer'
 FROM Students, StudentCards
@@ -563,4 +564,3 @@ WHERE DATEDIFF(YEAR, StudentCards.DateOut, StudentCards.DateIn) > 0
 --11.	Удалить из таблицы «Карточка студентов» студентов, которые уже вернули книги.
 DELETE FROM StudentCards
 WHERE StudentCards.DateIn IS NOT NULL
---Почему не работало != ?
