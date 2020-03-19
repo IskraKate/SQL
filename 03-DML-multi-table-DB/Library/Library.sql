@@ -442,7 +442,6 @@ Libs
 WHERE StudentCards.StudentFk = Students.Id AND Libs.Id = StudentCards.LibFk AND Libs.FirstName = 'Сергей' AND Libs.LastName = 'Максименко'
 AND DATEDIFF(month, StudentCards.DateOut, StudentCards.DateIn) > 1
 GROUP BY Students.FirstName, StudentCards.DateOut, StudentCards.DateIn, t.[Summary Beer], Libs.FirstName, Libs.LastName
-
 SELECT CAST(SUM(((DATEDIFF(week, StudentCards.DateOut, StudentCards.DateIn)-4)*0.25)) AS NUMERIC) AS 'Summary Beer'
 FROM Students, StudentCards
 WHERE StudentCards.StudentFk = Students.Id 
@@ -546,6 +545,8 @@ FROM (SELECT [CountTakenBooksS].[Theme], [CountTakenBooksS].[Count1] + [CountTak
 	[CountTakenBooksS].[Id1],
 	[CountTakenBooksT].[Id2]) [SumBooks]
 WHERE SumBooks.Id1 = SumBooks.Id2 ) 
+
+
 
 --10. «Заставить» сдать книги тех студентов, которые не сдавали книги более года,
 --    т.е. в таблице «Карточка студентов» (StudentCards) заполнить поле «Дата возврата»
