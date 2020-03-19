@@ -65,6 +65,7 @@ GO
 CREATE PROC Factorial @number INT
 AS
 BEGIN 
+
 DECLARE @factorial INT
 SET @factorial = 1;
 WHILE @number > 0
@@ -88,13 +89,15 @@ RETURNS INT
 AS 
 BEGIN 
 DECLARE @cntStudents INT;
+
 SELECT @cntStudents = COUNT(Students.Id)
 FROM Students
 WHERE Students.Id NOT IN
 (
-SELECT StudentCards.StudentFk
-FROM StudentCards
+	SELECT StudentCards.StudentFk
+	FROM StudentCards
 )
+
 RETURN @cntStudents;
 END
 GO
@@ -131,11 +134,11 @@ RETURNS VARCHAR(51)
 AS 
 BEGIN
     IF(@number/10 > @number%10)
-	RETURN 'Десятки больше единиц.'
+		RETURN 'Десятки больше единиц.'
 	IF(@number/10 < @number%10)
-	RETURN 'Единицы больше десятков.'
+		RETURN 'Единицы больше десятков.'
 	IF(@number/10 = @number%10)
-	RETURN 'Единицы равны десяткам.'
+		RETURN 'Единицы равны десяткам.'
 	RETURN 'Неверное входное значение.'
 END
 GO
@@ -183,47 +186,31 @@ GO
 --   и отсортированный по номеру поля, указанному в 5-м параметре,
 --   в направлении, указанном в 6-м параметре.
 
---ORDER BY CASE WHEN @SortDir = 1 THEN @Field END DESC,
---         CASE WHEN @SortDir = 0 THEN @Field END ASC
---order by case @ord when 1 then col1 end
---, case @ord when 2 then col2 end
---, case @ord when 3 then col3 
- --CASE @Field WHEN 2 then Books.[Name] END DESC,
-	--     CASE @Field WHEN 3 then Authors.FirstName END DESC,
-	--	 CASE @Field WHEN 4 then Themes.[Name] END DESC,
- --        CASE @Field WHEN 5 then Categories.[Name] END DESC
-
 CREATE FUNCTION dbo.ListOfBooks(@FirstName NVARCHAR(100), @LastName NVARCHAR(100),
 @Theme NVARCHAR(100), @Category NVARCHAR(100), @Field INT, @SortDir INT)
-RETURNS @bookList TABLE
-(  
-	Field INT,
-	BookName NVARCHAR(100) NOT NULL,
-	FirstName NVARCHAR(100) NOT NULL,
-	LastName NVARCHAR(100)NOT NULL,
-	Theme NVARCHAR(100) NOT NULL,
-	Category NVARCHAR(100)NOT NULL
-)
+RETURNS TABLE
 AS
-BEGIN 
-INSERT @bookList
-SELECT @Field, Books.[Name], Authors.FirstName, Authors.LastName, Themes.[Name], Categories.[Name]
-FROM Books, Authors, Categories, Themes
-WHERE Authors.FirstName = @FirstName
-AND Authors.LastName = @LastName
-AND Themes.[Name] = @Theme
-AND Categories.[Name] = @Category
-AND Books.AuthorFk  = Authors.Id 
-AND Books.ThemeFk = Themes.Id
-AND Books.CategoryFk = Categories.Id
-ORDER BY Books.[Name] DESC
 RETURN
-END
+(
+	SELECT TOP 100 Books.[Name] [BookName], Authors.FirstName, Authors.LastName,
+	Themes.[Name] [ThemeName], Categories.[Name] [CategoryName]
+	FROM Books, Authors, Categories, Themes
+	WHERE Authors.FirstName = @FirstName
+	AND Authors.LastName = @LastName
+	AND Themes.[Name] = @Theme
+	AND Categories.[Name] = @Category
+	AND Books.AuthorFk  = Authors.Id 
+	AND Books.ThemeFk = Themes.Id
+	AND Books.CategoryFk = Categories.Id
+	ORDER BY CASE @Field WHEN 1 then Books.[Name] END DESC,
+				 CASE @Field WHEN 2 then Authors.FirstName END DESC,
+				 CASE @Field WHEN 3 then Themes.[Name] END DESC,
+				 CASE @Field WHEN 4 then Categories.[Name] END DESC
+);
+
 GO
 
-DROP FUNCTION dbo.ListOfBooks
-
-SELECT * FROM dbo.ListOfBooks('Алексей','Архангельский','Программирование','C++ Builder', 2, 1)
+SELECT * FROM dbo.ListOfBooks('Алексей','Архангельский','Программирование','C++ Builder', 1, 1)
 GO
 
 --6. Функцию, которая возвращает список библиотекарей и кол-во выданных
@@ -239,14 +226,14 @@ RETURNS @LibsListFunc TABLE
 AS
 BEGIN
 INSERT @LibsListFunc
-SELECT Libs.FirstName, Libs.LastName, stud.cnt +COUNT(TeacherCards.LibFk)
-FROM Libs, TeacherCards,
-(SELECT COUNT(StudentCards.LibFk)cnt 
-FROM Libs, StudentCards 
-WHERE StudentCards.LibFk = Libs.Id 
-GROUP BY Libs.FirstName, Libs.LastName)stud
-WHERE TeacherCards.LibFk = Libs.Id
-GROUP BY Libs.FirstName, Libs.LastName, stud.cnt
+	SELECT Libs.FirstName, Libs.LastName, stud.cnt +COUNT(TeacherCards.LibFk)
+	FROM Libs, TeacherCards,
+	(SELECT COUNT(StudentCards.LibFk)cnt 
+	FROM Libs, StudentCards 
+	WHERE StudentCards.LibFk = Libs.Id 
+	GROUP BY Libs.FirstName, Libs.LastName)stud
+	WHERE TeacherCards.LibFk = Libs.Id
+	GROUP BY Libs.FirstName, Libs.LastName, stud.cnt
 RETURN 
 END
 GO
