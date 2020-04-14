@@ -1,7 +1,7 @@
-1	Adidas
-2	Nike
-3	Puma
-4	Umbro
-5	Joma
-6	Brooks
-7	Legea
+Adidas
+Nike
+Puma
+Umbro
+Joma
+Brooks
+Legea
