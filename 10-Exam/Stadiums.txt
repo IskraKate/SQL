@@ -1,0 +1,14 @@
+
+Yokhannesburg	Keyptaun	Durban		Yokhannesburg
+Sokker Siti	Keyptaun	Mozes Mabida	Koka-Kola Park
+84,490		64,100		62,760		55,686
+
+
+Pretoriya	 Port-Elizabet
+Loftus Versfel'd Nel'son Mandela Bey
+42,858		 42,486
+
+
+Polokwane       Nelspruit       Bloemfontein    Rustenburg
+Peter Mokaba    Mbombela Free   State Royal     Bafokeng
+41,733		40,929		40,911		38,646
