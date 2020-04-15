@@ -1,736 +1,352 @@
-GK	Moeneeb Josephs
-GK	Itumeleng Khune
-GK	Shu-Aib Walters
-DF	Siboniso Gaxa
-DF	Tsepo Masilela
-DF	Aaron Mokoena�(c)
-DF	Anele Ngcongca
-DF	Matthew Booth
-DF	Lucas Thwala
-DF	Bongani Khumalo
-DF	Siyabonga Sangweni
-MF	MacBeth Sibaya
-MF	Lance Davids
-MF	Siphiwe Tshabalala
-MF	Steven Pienaar
-MF	Teko Modise
-MF	Reneilwe Letsholonyane
-MF	Kagisho Dikgacoi
-MF	Surprise Moriri
-MF	Thanduyise Khuboni
-FW	Katlego Mphela
-FW	Bernard Parker
-FW	Siyabonga Nomvethe
-GK	?scar P?rez
-GK	Guillermo Ochoa
-GK	Luis Ernesto Michel
-DF	Francisco Rodr?guez
-DF	Carlos Salcido
-DF	Rafael M?rquez�(c)
-DF	Ricardo Osorio
-DF	Paul Aguilar
-DF	H?ctor Moreno
-DF	Efra?n Ju?rez
-DF	Jonny Magall?n
-DF	Jorge Torres Nilo
-MF	Gerardo Torrado
-MF	Pablo Barrera
-MF	Israel Castro
-MF	Andr?s Guardado
-MF	Alberto Medina
-FW	Guillermo Franco
-FW	Cuauht?moc Blanco
-FW	Carlos Vela
-FW	Javier Hern?ndez
-FW	Giovani dos Santos
-FW	Adolfo Bautista
-GK	Fernando Muslera
-GK	Juan Castillo
-GK	Mart?n Silva
-DF	Diego Lugano�(c)
-DF	Diego God?n
-DF	Jorge Fucile
-DF	Mauricio Victorino
-DF	Maxi Pereira
-DF	Andr?s Scotti
-DF	Mart?n C?ceres
-MF	Walter Gargano
-MF	Sebasti?n Eguren
-MF	?lvaro Pereira
-MF	Nicol?s Lodeiro
-MF	Diego P?rez
-MF	Egidio Ar?valo R?os
-MF	Ignacio Gonz?lez
-MF	?lvaro Fern?ndez
-FW	Edinson Cavani
-FW	Luis Su?rez
-FW	Diego Forl?n
-FW	Sebasti?n Abreu
-FW	Sebasti?n Fern?ndez
-GK	Hugo Lloris
-GK	Steve Mandanda
-GK	C?dric Carrasso
-DF	Bacary Sagna
-DF	?ric Abidal
-DF	Anthony R?veill?re
-DF	William Gallas
-DF	Marc Planus
-DF	Patrice Evra�(c)
-DF	S?bastien Squillaci
-DF	Ga?l Clichy
-MF	Franck Rib?ry
-MF	Yoann Gourcuff
-MF	J?r?my Toulalan
-MF	Florent Malouda
-MF	Alou Diarra
-MF	Abou Diaby
-MF	Mathieu Valbuena
-FW	Djibril Ciss?
-FW	Sidney Govou
-FW	Andr?-Pierre Gignac
-FW	Thierry Henry
-FW	Nicolas Anelka
-GK	Diego Pozo
-GK	Mariano And?jar
-GK	Sergio Romero
-DF	Mart?n Demichelis
-DF	Clemente Rodr?guez
-DF	Nicol?s Burdisso
-DF	Gabriel Heinze
-DF	Ariel Garc?
-DF	Walter Samuel
-DF	Nicol?s Otamendi
-MF	Mario Bolatti
-MF	?ngel di Mar?a
-MF	Juan Sebasti?n Ver?n
-MF	Javier Mascherano�(c)
-MF	Jon?s Guti?rrez
-MF	Maxi Rodr?guez
-MF	Javier Pastore
-FW	Gonzalo Higua?n
-FW	Lionel Messi
-FW	Carlos T?vez
-FW	Sergio Ag?ero
-FW	Mart?n Palermo
-FW	Diego Milito
-GK	Vincent Enyeama
-GK	Austin Ejide
-GK	Dele Aiyenugba
-DF	Joseph Yobo�(c)
-DF	Taye Taiwo
-DF	Rabiu Afolabi
-DF	Danny Shittu
-DF	Chidi Odiah
-DF	Uwa Echi?jil?
-DF	Dele Adeleye
-MF	Ayila Yussuf
-MF	Sani Kaita
-MF	Lukman Haruna
-MF	Dickson Etuhu
-FW	Nwankwo Kanu
-FW	John Utaka
-FW	Yakubu Aiyegbeni
-FW	Obafemi Martins
-FW	Brown Ideye[4]
-FW	Peter Odemwingie
-FW	Kalu Uche
-FW	Victor Obinna
-FW	Chinedu Obasi
-GK	Lee Woon-Jae
-GK	Jung Sung-Ryong
-GK	Kim Young-Kwang
-DF	Oh Beom-Seok
-DF	Kim Hyung-Il
-DF	Lee Young-Pyo
-DF	Lee Jung-Soo
-DF	Kim Dong-Jin
-DF	Cha Du-Ri
-DF	Kang Min-Soo
-MF	Cho Yong-Hyung
-MF	Kim Nam-Il
-MF	Kim Bo-Kyung
-MF	Park Ji-Sung�(c)
-MF	Kim Jae-Sung
-MF	Ki Sung-Yong
-MF	Lee Chung-Yong
-FW	Kim Jung-Woo
-FW	Ahn Jung-Hwan
-FW	Park Chu-Young
-FW	Lee Seung-Yeoul
-FW	Yeom Ki-Hun
-FW	Lee Dong-Gook
-GK	Kostas Chalkias
-GK	Alexandros Tzorvas
-GK	Michalis Sifakis
-DF	Giourkas Seitaridis
-DF	Christos Patsatzoglou
-DF	Vangelis Moras
-DF	Avraam Papadopoulos
-DF	Loukas Vyntra
-DF	Vasilis Torosidis
-DF	Sotirios Kyrgiakos
-DF	Sokratis Papastathopoulos
-DF	Stelios Malezas
-MF	Nikos Spiropoulos
-MF	Alexandros Tziolis
-MF	Giorgos Karagounis�(c)
-MF	Sotiris Ninis
-MF	Kostas Katsouranis
-MF	Sakis Prittas
-FW	Georgios Samaras
-FW	Angelos Charisteas
-FW	Dimitris Salpingidis
-FW	Theofanis Gekas
-FW	Pantelis Kapetanos
-GK	David James
-GK	Robert Green
-GK	Joe Hart
-DF	Glen Johnson
-DF	Ashley Cole
-DF	Michael Dawson[5]
-DF	John Terry
-DF	Stephen Warnock
-DF	Matthew Upson
-DF	Jamie Carragher
-DF	Ledley King
-MF	Steven Gerrard�(c)
-MF	Aaron Lennon
-MF	Frank Lampard
-MF	Joe Cole
-MF	Gareth Barry
-MF	James Milner
-MF	Shaun Wright-Phillips
-MF	Michael Carrick
-FW	Peter Crouch
-FW	Wayne Rooney
-FW	Jermain Defoe
-FW	Emile Heskey
-GK	Tim Howard
-GK	Brad Guzan
-GK	Marcus Hahnemann
-DF	Jonathan Spector
-DF	Carlos Bocanegra�(c)
-DF	Oguchi Onyewu
-DF	Steve Cherundolo
-DF	Jonathan Bornstein
-DF	Jay DeMerit
-DF	Clarence Goodson
-MF	Michael Bradley
-MF	DaMarcus Beasley
-MF	Clint Dempsey
-MF	Landon Donovan
-MF	Stuart Holden
-MF	Ricardo Clark
-MF	Jos? Francisco Torres
-MF	Maurice Edu
-MF	Benny Feilhaber
-FW	Herculez Gomez
-FW	Edson Buddle
-FW	Jozy Altidore
-FW	Robbie Findley
-GK	Loun?s Gaouaoui
-GK	Faouzi Chaouchi
-GK	Ra?s M'Bohli
-DF	Madjid Bougherra
-DF	Nadir Belhadj
-DF	Antar Yahia�(c)
-DF	Rafik Halliche
-DF	Habib Bella?d
-DF	Abdelkader La?faoui
-DF	Carl Medjani
-DF	Djamel Mesbah
-MF	Yazid Mansouri
-MF	Ryad Boudebouz
-MF	Medhi Lacen
-MF	Karim Ziani
-MF	Adl?ne Guedioura
-MF	Hassan Yebda
-MF	Foued Kadir
-MF	Djamel Abdoun
-FW	Abdelkader Ghezzal
-FW	Rafik Sa?fi
-FW	Rafik Djebbour
-FW	Karim Matmour
-GK	Samir Handanovi?
-GK	Jasmin Handanovi?
-GK	Aleksander ?eliga
-DF	Mi?o Bre?ko
-DF	Elvedin D?ini?
-DF	Marko ?uler
-DF	Bo?tjan Cesar
-DF	Branko Ili?
-DF	Bojan Joki?
-DF	Suad Filekovi?
-DF	Matej Mavri?
-MF	Robert Koren�(c)
-MF	Rene Krhin
-MF	Andra? Kirm
-MF	Aleksandar Radosavljevi?
-MF	Andrej Komac
-MF	Dalibor Stevanovi?
-FW	Nejc Pe?nik
-FW	Zlatan Ljubijanki?
-FW	Valter Birsa
-FW	Milivoje Novakovi?
-FW	Zlatko Dedi?
-FW	Tim Matav?
-GK	Manuel Neuer
-GK	Tim Wiese
-GK	Hans-J?rg Butt
-DF	Marcell Jansen
-DF	Arne Friedrich
-DF	Dennis Aogo
-DF	Serdar Tasci
-DF	Holger Badstuber
-DF	Philipp Lahm�(c)
-DF	Per Mertesacker
-DF	J?r?me Boateng
-MF	Sami Khedira
-MF	Bastian Schweinsteiger
-MF	Mesut ?zil
-MF	Lukas Podolski
-MF	Thomas M?ller
-MF	Piotr Trochowski
-MF	Toni Kroos
-MF	Marko Marin
-FW	Stefan Kie?ling
-FW	Miroslav Klose
-FW	Cacau
-FW	Mario G?mez
-GK	Mark Schwarzer
-GK	Adam Federici
-GK	Eugene Galekovi?[6]
-DF	Lucas Neill�(c)
-DF	Craig Moore
-DF	Michael Beauchamp
-DF	Luke Wilkshire
-DF	Scott Chipperfield
-DF	Mark Milligan
-DF	David Carney
-MF	Tim Cahill
-MF	Jason Culina
-MF	Brett Emerton
-MF	Vince Grella
-MF	Mile Jedinak
-MF	Carl Valeri
-MF	Richard Garcia
-MF	Dario Vido?i?
-MF	Mark Bresciano
-FW	Joshua Kennedy
-FW	Harry Kewell
-FW	Brett Holman
-FW	Nikita Rukavytsya
-GK	Vladimir Stojkovi?
-GK	Bojan Isailovi?
-GK	An?elko ?uri?i?
-DF	Antonio Rukavina
-DF	Aleksandar Kolarov
-DF	Nemanja Vidi?
-DF	Branislav Ivanovi?
-DF	Aleksandar Lukovi?
-DF	Ivan Obradovi?
-DF	Neven Suboti?
-MF	Gojko Ka?ar
-MF	Zoran To?i?
-MF	Dejan Stankovi?�(c)
-MF	Nenad Milija?
-MF	Milan Jovanovi?
-MF	Milo? Krasi?
-MF	Milo? Ninkovi?
-MF	Radosav Petrovi?
-MF	Zdravko Kuzmanovi?
-FW	Danko Lazovi?
-FW	Marko Panteli?
-FW	Nikola ?igi?
-FW	Dragan Mr?a
-GK	Daniel Adjei
-GK	Stephen Ahorlu
-GK	Richard Kingson
-DF	Hans Sarpei
-DF	John Paintsil
-DF	John Mensah�(c)
-DF	Samuel Inkoom
-DF	Jonathan Mensah
-DF	Isaac Vorsah
-DF	Abdul Rahim Ayew
-DF	Lee Addy
-MF	Anthony Annan
-MF	Derek Boateng
-MF	Stephen Appiah
-MF	Sulley Muntari
-MF	Andr? Ayew
-MF	Quincy Owusu-Abeyie
-MF	Kwadwo Asamoah
-MF	Kevin-Prince Boateng
-FW	Asamoah Gyan
-FW	Prince Tagoe
-FW	Matthew Amoah
-FW	Dominic Adiyiah
-GK	Maarten Stekelenburg
-GK	Michel Vorm
-GK	Sander Boschker
-DF	Gregory van der Wiel
-DF	John Heitinga
-DF	Joris Mathijsen
-DF	Giovanni van Bronckhorst�(c)
-DF	Khalid Boulahrouz
-DF	Andr? Ooijer
-DF	Edson Braafheid
-MF	Mark van Bommel
-MF	Nigel de Jong
-MF	Wesley Sneijder
-MF	Demy de Zeeuw
-MF	Stijn Schaars
-MF	Ibrahim Afellay
-MF	Rafael van der Vaart
-FW	Dirk Kuyt
-FW	Robin van Persie
-FW	Arjen Robben
-FW	Eljero Elia
-FW	Ryan Babel
-FW	Klaas-Jan Huntelaar
-GK	Thomas S?rensen
-GK	Stephan Andersen
-GK	Jesper Christiansen
-DF	Simon Kj?r
-DF	Daniel Agger
-DF	William Kvist
-DF	Lars Jacobsen
-DF	Per Kr?ldrup
-DF	Simon Poulsen
-DF	Patrick Mtiliga
-MF	Christian Poulsen
-MF	Daniel Jensen
-MF	Jesper Gr?nkj?r
-MF	Martin J?rgensen
-MF	Thomas Kahlenberg
-MF	Jakob Poulsen
-MF	Mikkel Beckmann
-MF	Dennis Rommedahl
-MF	Thomas Enevoldsen
-MF	Christian Eriksen
-FW	Jon Dahl Tomasson�(c)
-FW	Nicklas Bendtner
-FW	S?ren Larsen
-GK	Seigo Narazaki
-GK	Eiji Kawashima
-GK	Yoshikatsu Kawaguchi�(c)
-DF	Y?ichi Komano
-DF	Marcus Tulio Tanaka
-DF	Yuto Nagatomo
-DF	Atsuto Uchida
-DF	Daiki Iwamasa
-DF	Yasuyuki Konno
-DF	Yuji Nakazawa
-MF	Yuki Abe
-MF	Yasuhito End?
-MF	Shunsuke Nakamura
-MF	Kengo Nakamura
-MF	Makoto Hasebe�(vc)
-MF	Keisuke Honda
-MF	Junichi Inamoto
-FW	Daisuke Matsui
-FW	Shinji Okazaki
-FW	Keiji Tamada
-FW	Kisho Yano
-FW	Yoshito ?kubo
-FW	Takayuki Morimoto
-GK	Carlos Kameni
-GK	Souleymanou Hamidou
-GK	Guy N'dy Assemb?
-DF	Beno?t Assou-Ekotto
-DF	Nicolas N'Koulou
-DF	Rigobert Song
-DF	S?bastien Bassong
-DF	Geremi
-DF	Ga?tan Bong
-DF	Aur?lien Chedjou
-DF	St?phane Mbia
-MF	Alex Song
-MF	Landry N'Gu?mo
-MF	Achille Emana
-MF	Jean Makoun
-MF	Eyong Enoh
-MF	Georges Mandjeck
-MF	Jo?l Matip
-FW	Samuel Eto'o�(c)
-FW	Eric Choupo-Moting
-FW	Pierre Web?
-FW	Mohammadou Idrissou
-FW	Vincent Aboubakar
-GK	Gianluigi Buffon
-GK	Federico Marchetti
-GK	Morgan De Sanctis
-DF	Christian Maggio
-DF	Domenico Criscito
-DF	Giorgio Chiellini
-DF	Fabio Cannavaro�(c)
-DF	Salvatore Bocchetti
-DF	Gianluca Zambrotta
-DF	Leonardo Bonucci
-MF	Daniele De Rossi
-MF	Simone Pepe
-MF	Gennaro Gattuso
-MF	Claudio Marchisio
-MF	Mauro Camoranesi
-MF	Angelo Palombo
-MF	Andrea Pirlo
-MF	Riccardo Montolivo
-FW	Vincenzo Iaquinta
-FW	Antonio Di Natale
-FW	Alberto Gilardino
-FW	Fabio Quagliarella
-FW	Giampaolo Pazzini
-GK	Justo Villar�(c)
-GK	Diego Barreto
-GK	Aldo Bobadilla
-DF	Dar?o Ver?n
-DF	Claudio Morel
-DF	Denis Caniza
-DF	Julio C?sar C?ceres
-DF	Carlos Bonet
-DF	Paulo da Silva
-DF	Aureliano Torres
-DF	Antol?n Alcaraz
-MF	?dgar Barreto
-MF	Jonathan Santana
-MF	Enrique Vera
-MF	V?ctor C?ceres
-MF	Cristian Riveros
-MF	N?stor Ortigoza
-FW	?scar Cardozo
-FW	Roque Santa Cruz
-FW	?dgar Ben?tez
-FW	Nelson Valdez
-FW	Lucas Barrios
-FW	Rodolfo Gamarra
-GK	Mark Paston
-GK	Glen Moss
-GK	James Bannatyne
-DF	Ben Sigmund
-DF	Tony Lochhead
-DF	Winston Reid
-DF	Ivan Vicelich
-DF	Ryan Nelsen�(c)
-DF	Andrew Boyens
-DF	Tommy Smith
-MF	Simon Elliott
-MF	Tim Brown
-MF	Leo Bertos
-MF	Andy Barron
-MF	Michael McGlinchey
-MF	Aaron Clapham
-MF	David Mulligan
-MF	Jeremy Christie
-MF	Jeremy Brockie
-FW	Shane Smeltz
-FW	Chris Killen
-FW	Rory Fallon
-FW	Chris Wood
-GK	J?n Mucha
-GK	Du?an Perni?
-GK	Du?an Kuciak
-DF	Peter Pekar?k
-DF	Martin ?krtel
-DF	Marek ?ech
-DF	Radoslav Zabavn?k
-DF	J?n ?urica
-DF	Kornel Sal?ta
-DF	Martin Petr??
-MF	Zdeno ?trba
-MF	Vladim?r Weiss
-MF	J?n Koz?k
-MF	Stanislav ?est?k
-MF	Marek Sapara
-MF	Miroslav Stoch
-MF	Marek Ham??k�(c)
-MF	Juraj Kucka
-MF	Kamil Kop?nek
-FW	R?bert Vittek
-FW	Filip Holo?ko
-FW	Martin Jakubko
-FW	Erik Jendri?ek
-GK	J?lio C?sar
-GK	Gomes
-GK	Doni
-DF	Maicon
-DF	L?cio�(c)
-DF	Juan
-DF	Michel Bastos
-DF	Daniel Alves
-DF	Luis?o
-DF	Thiago Silva
-DF	Gilberto
-MF	Felipe Melo
-MF	Elano
-MF	Gilberto Silva
-MF	Kak?
-MF	Josu?
-MF	Ramires
-MF	J?lio Baptista
-MF	Kl?berson
-FW	Lu?s Fabiano
-FW	Robinho
-FW	Nilmar
-FW	Grafite
-GK	Ri Myong-Guk
-GK	Kim Myong-Gil
-GK	Kim Myong-Won[8]
-DF	Cha Jong-Hyok
-DF	Ri Jun-Il
-DF	Ri Kwang-Chon
-DF	Ji Yun-Nam
-DF	Pak Chol-Jin
-DF	Pak Nam-Chol
-DF	Nam Song-Chol
-DF	Ri Kwang-Hyok
-MF	Pak Nam-Chol
-MF	Kim Kum-Il
-MF	Mun In-Guk
-MF	Kim Yong-Jun
-MF	An Yong-Hak
-MF	Ri Chol-Myong
-MF	Kim Kyong-Il
-MF	Pak Sung-Hyok
-FW	An Chol-Hyok
-FW	Jong Tae-Se
-FW	Hong Yong-Jo�(c)
-FW	Choe Kum-Chol
-GK	Boubacar Barry
-GK	Aristide Zogbo
-GK	Daniel Yeboah
-DF	Benjamin Angoua
-DF	Arthur Boka
-DF	Kolo Tour?
-DF	Steve Gohouri
-DF	Siaka Ti?n?
-DF	Guy Demel
-DF	Emmanuel Ebou?
-DF	Sol Bamba
-MF	Didier Zokora
-MF	Cheick Tiot?
-MF	Jean-Jacques Gosso
-MF	Romaric
-MF	Emmanuel Kon?
-MF	Kader Ke?ta
-MF	Yaya Tour?
-FW	Seydou Doumbia
-FW	Salomon Kalou
-FW	Gervinho
-FW	Didier Drogba�(c)
-FW	Aruna Dindane
-GK	Eduardo
-GK	Beto
-GK	Daniel Fernandes
-DF	Bruno Alves
-DF	Paulo Ferreira
-DF	Rolando
-DF	Duda
-DF	Ricardo Carvalho
-DF	Miguel
-DF	Pepe
-DF	Ricardo Costa
-DF	F?bio Coentr?o
-MF	Pedro Mendes
-MF	Danny
-MF	Sim?o
-MF	Miguel Veloso
-MF	Raul Meireles
-MF	Ruben Amorim[9]
-MF	Tiago
-MF	Deco
-FW	Cristiano Ronaldo�(c)
-FW	Li?dson
-FW	Hugo Almeida
-GK	Iker Casillas�(c)
-GK	V?ctor Vald?s
-GK	Pepe Reina
-DF	Ra?l Albiol
-DF	Gerard Piqu?
-DF	Carlos Marchena
-DF	Carles Puyol
-DF	Joan Capdevila
-DF	Sergio Ramos
-DF	?lvaro Arbeloa
-MF	Andr?s Iniesta
-MF	Xavi
-MF	Cesc F?bregas
-MF	Juan Mata
-MF	Xabi Alonso
-MF	Sergio Busquets
-MF	Javi Mart?nez
-MF	David Silva
-MF	Jes?s Navas
-FW	David Villa
-FW	Fernando Torres
-FW	Pedro
-FW	Fernando Llorente
-GK	Diego Benaglio
-GK	Marco W?lfli
-GK	Johnny Leoni
-DF	Stephan Lichtsteiner
-DF	Ludovic Magnin
-DF	Philippe Senderos
-DF	Steve von Bergen
-DF	St?phane Grichting
-DF	Reto Ziegler
-DF	Mario Eggimann
-MF	Benjamin Huggel
-MF	Tranquillo Barnetta
-MF	G?khan Inler
-MF	Valon Behrami
-MF	Marco Padalino
-MF	Hakan Yakin
-MF	Gelson Fernandes
-MF	Pirmin Schwegler
-MF	Xherdan Shaqiri
-FW	Alexander Frei�(c)
-FW	Blaise Nkufo
-FW	Albert Bunjaku
-FW	Eren Derdiyok
-GK	Ricardo Canales
-GK	Noel Valladares
-GK	Donis Escober
-DF	Osman Ch?vez
-DF	Maynor Figueroa
-DF	Johnny Palacios
-DF	V?ctor Bern?rdez
-DF	Oscar Garc?a
-DF	Mauricio Sabill?n
-DF	Emilio Izaguirre
-DF	Sergio Mendoza
-MF	Hendry Thomas
-MF	Ram?n N??ez
-MF	Wilson Palacios
-MF	Edgar ?lvarez
-MF	Danilo Turcios
-MF	Amado Guevara�(c)
-FW	Carlos Pav?n
-FW	Jerry Palacios[10]
-FW	David Suazo
-FW	Georgie Welcome
-FW	Roger Espinoza
-FW	Walter Mart?nez
-GK	Claudio Bravo�(c)
-GK	Miguel Pinto
-GK	Luis Mar?n
-DF	Ismael Fuentes
-DF	Waldo Ponce
-DF	Pablo Contreras
-DF	Arturo Vidal
-DF	Gary Medel
-DF	Gonzalo Jara
-MF	Mauricio Isla
-MF	Carlos Carmona
-MF	Jorge Valdivia
-MF	Marco Estrada
-MF	Mat?as Fern?ndez
-MF	Gonzalo Fierro
-MF	Rodrigo Millar
-MF	Rodrigo Tello
-FW	Alexis S?nchez
-FW	Humberto Suazo
-FW	Mark Gonz?lez
-FW	Jean Beausejour
-FW	Fabi?n Orellana
-FW	Esteban Paredes
+Itumeleng Khune|1|1
+Shu-Aib Walters|1|2
+Moeneeb Josephs|1|3
+Fernando Muslera|1|4
+Juan Castillo|1|5
+Martín Silva|1|6
+Óscar Pérez|1|7
+Guillermo Ochoa|1|8
+Luis Ernesto Michel|1|9
+Hugo Lloris|1|10
+Steve Mandanda|1|11
+Cédric Carrasso|1|12
+Diego Pozo|1|13
+Mariano Andújar|1|14
+Sergio Romero|1|15
+Vincent Enyeama|1|16
+Austin Ejide|1|17
+Dele Aiyenugba|1|18
+Lee Woon-Jae|1|19
+Jung Sung-Ryong|1|20
+Kim Young-Kwang|1|21
+Kostas Chalkias|1|22
+Alexandros Tzorvas|1|23
+Michalis Sifakis|1|24
+Tim Howard|1|25
+Brad Guzan|1|26
+Marcus Hahnemann|1|27
+David James|1|28
+Robert Green|1|29
+Joe Hart|1|30
+Lounès Gaouaoui|1|31
+Faouzi Chaouchi|1|32
+Raïs M'Bohli|2|1
+Samir Handanović|2|2
+Jasmin Handanovič|2|3
+Aleksander Šeliga|2|4
+Manuel Neuer|2|5
+Tim Wiese|2|6
+Hans-Jörg Butt|2|7
+Mark Schwarzer|2|8
+Adam Federici|2|9
+Eugene Galeković|2|10
+Vladimir Stojković|2|11
+Bojan Isailović|2|12
+Anđelko Đuričić|2|13
+Daniel Adjei|2|14
+Stephen Ahorlu|2|15
+Richard Kingson|2|16
+Siboniso Gaxa|2|17
+Tsepo Masilela|2|18
+Aaron Mokoena|2|19
+Anele Ngcongca|2|20
+Matthew Booth|2|21
+Lucas Thwala|2|22
+Bongani Khumalo|2|23
+Siyabonga Sangweni|2|24
+Francisco Rodríguez|2|25
+Carlos Salcido|2|26
+Rafael Márquez|2|27
+Ricardo Osorio|2|28
+Paul Aguilar|2|29
+Héctor Moreno|2|30
+Efraín Juárez|2|31
+Jonny Magallón|2|32
+Jorge Torres|2|1
+Diego Lugano|2|2
+Diego Godín|2|3
+Jorge Fucile|2|4
+Mauricio Victorino|2|5
+Maxi Pereira|2|6
+Andrés Scotti|2|7
+Martín Cáceres|2|8
+Bacary Sagna|2|9
+Éric Abidal|2|10
+Anthony Réveillère|2|11
+William Gallas|2|12
+Marc Planus|2|13
+Patrice Evra|2|14
+Sébastien Squillaci|2|15
+Gaël Clichy|2|16
+Martín Demichelis|2|17
+Clemente Rodríguez|2|18
+Nicolás Burdisso|2|19
+Gabriel Heinze|2|20
+Ariel Garcé|2|21
+Walter Samuel|2|22
+Nicolás Otamendi|2|23
+Joseph Yobo|2|24
+Taye Taiwo|2|25
+Rabiu Afolabi|2|26
+Danny Shittu|2|27
+Chidi Odiah|2|28
+Uwa Echiéjilé|2|29
+Dele Adeleye|2|30
+Beom-Seok|2|31
+Hyung-Il|2|32
+Young-Pyo|2|1
+Jung-Soo|2|2
+Dong-Jin|2|3
+Du-Ri|2|4
+Min-Soo|2|5
+Giourkas Seitaridis|2|6
+Christos Patsatzoglou|2|7
+Vangelis Moras|2|8
+Avraam Papadopoulos|2|9
+Loukas Vyntra|2|10
+Vasilis Torosidis|2|11
+Sotirios Kyrgiakos|2|12
+Sokratis Papastathopoulos|2|13
+Stelios Malezas|2|14
+Glen Johnson|2|15
+Ashley Cole|2|16
+Michael Dawson|2|17
+John Terry|2|18
+Stephen Warnock|2|19
+Matthew Upson|2|20
+Jamie Carragher|2|21
+Ledley King|2|22
+Jonathan Spector|2|23
+Carlos Bocanegra|2|24
+Oguchi Onyewu|2|25
+Steve Cherundolo|2|26
+Jonathan Bornstein|2|27
+Jay DeMerit|2|28
+Clarence Goodson|2|29
+Madjid Bougherra|2|30
+Nadir Belhadj|2|31
+Antar Yahia|2|32
+Rafik Halliche|2|1
+Habib Bellaïd|2|2
+Abdelkader Laïfaoui|2|3
+Carl Medjani|2|4
+Djamel Mesbah|2|5
+Mišo Brečko|2|6
+Elvedin Džinić|2|7
+Marko Šuler|2|8
+Boštjan Cesar|2|9
+Branko Ilič|2|10
+Bojan Jokić|2|11
+Suad Filekovič|2|12
+Matej Mavrič|2|13
+Marcell Jansen|2|14
+Arne Friedrich|2|15
+Dennis Aogo|2|16
+Serdar Tasci|2|17
+Holger Badstuber|2|18
+Philipp Lahm |2|19
+Per Mertesacker|2|20
+Jérôme Boateng|2|21
+Lucas Neill |2|22
+Craig Moore|2|23
+Michael Beauchamp|2|24
+Luke Wilkshire|2|25
+Scott Chipperfield|2|26
+Mark Milligan|2|27
+David Carney|2|28
+Antonio Rukavina|2|29
+Aleksandar Kolarov|2|30
+Nemanja Vidić|2|31
+Branislav Ivanović|2|32
+Aleksandar Luković|3|1
+Ivan Obradović|3|2
+Neven Subotić|3|3
+Hans Sarpei|3|4
+John Paintsil|3|5
+John Mensah|3|6
+Samuel Inkoom|3|7
+MacBeth Sibaya|3|8
+Lance Davids|3|9
+Siphiwe Tshabalala|3|10
+Steven Pienaar|3|11
+Teko Modise|3|12
+Reneilwe Letsholonyane|3|13
+Kagisho Dikgacoi|3|14
+Surprise Moriri|3|15
+Thanduyise Khuboni|3|16
+Gerardo Torrado|3|17
+Pablo Barrera|3|18
+Israel Castro|3|19
+Andrés Guardado|3|20
+Alberto Medina|3|21
+Walter Gargano|3|22
+Sebastián Eguren|3|23
+Álvaro Pereira|3|24
+Nicolás Lodeiro|3|25
+Diego Pérez|3|26
+Arévalo Ríos|3|27
+Ignacio González|3|28
+Álvaro Fernández|3|29
+Franck Ribéry|3|30
+Yoann Gourcuff|3|31
+Jérémy Toulalan|3|32
+Florent Malouda|3|1
+Alou Diarra|3|2
+Abou Diaby|3|3
+Mathieu Valbuena|3|4
+Mario Bolatti|3|5
+di María|3|6
+Sebastián Verón|3|7
+Javier Mascherano|3|8
+Jonás Gutiérrez|3|9
+Maxi Rodríguez|3|10
+Javier Pastore|3|11
+Ayila Yussuf|3|12
+Sani Kaita|3|13
+Lukman Haruna|3|14
+Dickson Etuhu|3|15
+Yong-Hyung|3|16
+Nam-Il|3|17
+Bo-Kyung|3|18
+Ji-Sung|3|19
+Jae-Sung|3|20
+Sung-Yong|3|21
+Chung-Yong|3|22
+Nikos Spiropoulos|3|23
+Alexandros Tziolis|3|24
+Giorgos Karagounis|3|25
+Sotiris Ninis|3|26
+Kostas Katsouranis|3|27
+Sakis Prittas|3|28
+Steven Gerrard|3|29
+Aaron Lennon|3|30
+Frank Lampard|3|31
+Joe Cole|3|32
+Gareth Barry|3|1
+James Milner|3|2
+Wright-Phillips|3|3
+Michael Carrick|3|4
+Michael Bradley|3|5
+DaMarcus Beasley|3|6
+Clint Dempsey|3|7
+Landon Donovan|3|8
+Stuart Holden|3|9
+Ricardo Clark|3|10
+Francisco Torres|3|11
+Maurice Edu|3|12
+Benny Feilhaber|3|13
+Yazid Mansouri|3|14
+Ryad Boudebouz|3|15
+Medhi Lacen|3|16
+Karim Ziani|3|17
+Adlène Guedioura|3|18
+Hassan Yebda|3|19
+Foued Kadir|3|20
+Djamel Abdoun|3|21
+Robert Koren|3|22
+Rene Krhin|3|23
+Andraž Kirm|3|24
+Aleksandar Radosavljevič|3|25
+Andrej Komac|3|26
+Dalibor Stevanovič|3|27
+Sami Khedira|3|28
+Bastian Schweinsteiger|3|29
+Mesut Özil|3|30
+Lukas Podolski|3|31
+Thomas Müller|3|32
+Piotr Trochowski|4|1
+Toni Kroos|4|2
+Marko Marin|4|3
+Tim Cahill|4|4
+Jason Culina|4|5
+Brett Emerton|4|6
+Vince Grella|4|7
+Mile Jedinak|4|8
+Carl Valeri|4|9
+Richard Garcia|4|10
+Dario Vidošić|4|11
+Mark Bresciano|4|12
+Gojko Kačar|4|13
+Zoran Tošić|4|14
+Dejan Stanković|4|15
+Nenad Milijaš|4|16
+Milan Jovanović|4|17
+Miloš Krasić|4|18
+Miloš Ninković|4|19
+Radosav Petrović|4|20
+Zdravko Kuzmanović|4|21
+Katlego Mphela|4|22
+Bernard Parker|4|23
+Siyabonga Nomvethe|4|24 
+Guillermo Franco|4|25
+Cuauhtémoc Blanco|4|26
+Carlos Vela|4|27
+Javier Hernández|4|28
+Giovani dos Santos|4|29
+Adolfo Bautista|4|30
+Edinson Cavani|4|31
+Luis Suárez|4|32
+Diego Forlán|4|1
+Sebastián Abreu|4|2
+Sebastián Fernández|4|3
+Djibril Cissé|4|4
+Sidney Govou|4|5
+André-Pierre Gignac|4|6
+Thierry Henry|4|7
+Nicolas Anelka|4|8
+Gonzalo Higuaín|4|9
+Lionel Messi|4|10
+Carlos Tévez|4|11
+Sergio Agüero|4|12
+Martín Palermo|4|13
+Diego Milito|4|14
+Nwankwo Kanu|4|15
+John Utaka|4|16
+Yakubu Aiyegbeni|4|17
+Obafemi Martins|4|18
+Brown Ideye|4|19
+Peter Odemwingie|4|20
+Kalu Uche|4|21
+Victor Obinna|4|22
+Chinedu Obasi|4|23
+Kim Jung-Woo|4|24
+Ahn Jung-Hwan|4|25
+Park Chu-Young|4|26
+Lee Seung-Yeoul|4|27
+Yeom Ki-Hun|4|28
+Lee Dong-Gook|4|29
+Georgios Samaras|4|30
+Liédson|4|31
+Hugo Almeida|4|32
+Angelos Charisteas|4|1
+Dimitris Salpingidis|4|2
+Theofanis Gekas|4|3
+Pantelis Kapetanos|4|4
+Peter Crouch|4|5
+Wayne Rooney|4|6
+Jermain Defoe|4|7
+Emile Heskey|4|8
+Herculez Gomez|4|9
+Edson Buddle|4|10
+Jozy Altidore|4|11
+Robbie Findley|4|12
+Abdelkader Ghezzal|4|13
+Rafik Saïfi|4|14
+Rafik Djebbour|4|15
+Karim Matmour|4|16
+Nejc Pečnik|4|17
+Zlatan Ljubijankič|4|18
+Valter Birsa|4|19
+Milivoje Novakovič|4|20
+Zlatko Dedič|4|21
+Tim Matavž|4|22
+Stefan Kießling|4|23
+Miroslav Klose|4|24
+Cacau|4|25
+Mario Gómez|4|26
+Joshua Kennedy|4|27
+Harry Kewell|4|28
+Brett Holman|4|29
+Nikita Rukavytsya|4|30
+Danko Lazović|4|31
+Marko Pantelić|4|32

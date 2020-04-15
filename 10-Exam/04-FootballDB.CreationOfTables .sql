@@ -14,36 +14,42 @@ Go
 
 CREATE TABLE Positions
 (
-	Id int PRIMARY KEY NOT NULL,
-	[Name] varchar NOT NULL
+	Id int PRIMARY KEY IDENTITY,
+	[Name] NVARCHAR(100) NOT NULL
 )
 GO
 
 CREATE TABLE Equipment
 (
 	Id int PRIMARY KEY IDENTITY,
-	[Name] VARCHAR(MAX) NOT NULL
+	[Name] NVARCHAR(100) NOT NULL
+)
+GO
+
+
+CREATE TABLE Countries
+(
+	Id int PRIMARY KEY IDENTITY,
+	[Name] NVARCHAR(100) NOT NULL
 )
 GO
 
 CREATE TABLE Trainers
 (
-	Id int PRIMARY KEY NOT NULL,
-	[Name] varchar NOT NULL
-)
-GO
-
-CREATE TABLE Countries
-(
 	Id int PRIMARY KEY IDENTITY,
-	[Name] VARCHAR(MAX) NOT NULL
+	[Name] NVARCHAR(100) NOT NULL,
+	CountryFk int,
+	CountryChampFk int,
+
+	FOREIGN KEY (CountryFk) REFERENCES Countries(Id),
+	FOREIGN KEY (CountryChampFk) REFERENCES Countries(Id)
 )
 GO
 
 CREATE TABLE Cities
 (
-	Id int PRIMARY KEY NOT NULL,
-	[Name] varchar NOT NULL,
+	Id int PRIMARY KEY IDENTITY,
+	[Name] NVARCHAR(100) NOT NULL,
 	CountryFk int
 
 	FOREIGN KEY (CountryFk) REFERENCES Countries(Id)
@@ -54,8 +60,9 @@ GO
 
 CREATE TABLE Stadiums
 (
-	Id int PRIMARY KEY NOT NULL,
-	[Name] varchar NOT NULL,
+	Id int PRIMARY KEY IDENTITY,
+	[Name] NVARCHAR(100) NOT NULL,
+	Capacity int,
 	CityFk int
 
 	FOREIGN KEY (CityFk) REFERENCES Cities(Id)
@@ -66,8 +73,8 @@ GO
 
 CREATE TABLE Commands
 (	
-	Id int PRIMARY KEY NOT NULL,
-	[Name] varchar NOT NULL,
+	Id int PRIMARY KEY IDENTITY,
+	[Name] NVARCHAR(100) NOT NULL,
 	CountryFk int NOT NULL,
 	TrainerFk int NOT NULL,
 	EquipmentFk int NOT NULL
@@ -87,7 +94,7 @@ Go
 CREATE TABLE Players
 (
 	Id int PRIMARY KEY NOT NULL,
-	[Name] varchar NOT NULL,
+	[Name] NVARCHAR(100) NOT NULL,
 	CommandFk int NOT NULL
 
 	FOREIGN KEY (CommandFk) REFERENCES Commands(Id)
@@ -102,14 +109,14 @@ GO
 CREATE TABLE Associations
 (
 	Id int PRIMARY KEY NOT NULL,
-	[Name] varchar NOT NULL
+	[Name] NVARCHAR(100) NOT NULL
 )
 Go
 
 CREATE TABLE Judges
 (
 	Id int PRIMARY KEY NOT NULL,
-	[Name] varchar NOT NULL,
+	[Name] NVARCHAR(100) NOT NULL,
 	AssociationFk int NOT NULL
 
 	FOREIGN KEY (AssociationFk) REFERENCES Associations(Id)
@@ -120,12 +127,12 @@ Go
 
 CREATE TABLE Matches
 (
-	Id int PRIMARY KEY NOT NULL,
-	Schedule datetime NOT NULL,
-	CommandFk1 int NOT NULL,
-	CommandFk2 int NOT NULL,
-	JudgeFk int NOT NULL,
-	StadiumFk int NOT NULL,
+	Id INT PRIMARY KEY NOT NULL,
+	Schedule DATETIME NOT NULL,
+	CommandFk1 INT NOT NULL,
+	CommandFk2 INT NOT NULL,
+	JudgeFk INT NOT NULL,
+	StadiumFk INT NOT NULL,
 
 	FOREIGN KEY (JudgeFk) REFERENCES Judges(Id)
 	ON DELETE CASCADE
@@ -144,10 +151,10 @@ Go
 
 CREATE TABLE MatchResults
 (
-	Id int PRIMARY KEY NOT NULL,
-	Winner int NULL,
-	Looser int NULL,
-	Result varchar NOT NULL
+	Id INT PRIMARY KEY NOT NULL,
+	Winner INT NULL,
+	Looser INT NULL,
+	Result NVARCHAR(100) NOT NULL
 	--'Выиграла одна из сторон/Ничья'
 	FOREIGN KEY (Id) REFERENCES Matches(Id)
 	ON DELETE CASCADE
@@ -156,10 +163,10 @@ CREATE TABLE MatchResults
 
 CREATE TABLE TopScorers
 (
-	Id int PRIMARY KEY NOT NULL,
-	TimeIfGoal Time NOT NULL,
-	PlayerFk int NOT NULL,
-	MatchFk int NOT NULL
+	Id INT PRIMARY KEY NOT NULL,
+	TimeIfGoal TIME NOT NULL,
+	PlayerFk INT NOT NULL,
+	MatchFk INT NOT NULL
 
 	FOREIGN KEY (PlayerFk) REFERENCES Players(Id)
 	ON DELETE CASCADE
