@@ -298,6 +298,34 @@ GO
 
 
 ------------------------------------------------------------------------------------------
+CREATE TABLE #ImportDates
+(
+	 Schedule Datetime
+)
+GO
+BULK INSERT #ImportDates
+FROM 'C:\Users\katei\source\repos\sql-homework\10-Exam\GroupTime.txt'
+WITH 
+( 
+	FIELDTERMINATOR = '|',
+    ROWTERMINATOR = '\n'
+)
+
+SELECT * FROM #ImportDates
+
+INSERT INTO Dates(Schedule)
+SELECT #ImportDates.Schedule
+FROM #ImportDates
+GO
+
+DROP TABLE #ImportDates
+GO
+------------------------------------------------------------------------------------------
+
+
+
+
+------------------------------------------------------------------------------------------
 CREATE PROCEDURE GetRandIdCommand
 @id INT OUTPUT
 AS
@@ -402,12 +430,31 @@ GO
 
 EXECUTE FillGroups;
 DROP PROCEDURE FillGroups;
+GO
 ------------------------------------------------------------------------------------------
 
 
 
 
 ------------------------------------------------------------------------------------------
+CREATE PROCEDURE FillMatches
+AS
+BEGIN
+
+END
+GO
+
+
+
+
+
+
+
+
+
+
+
+
 --CREATE PROCEDURE Replay
 --AS
 --BEGIN
