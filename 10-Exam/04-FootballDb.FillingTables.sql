@@ -291,6 +291,153 @@ FROM #ImportJudges
 GO
 
 DROP TABLE #ImportJudges
+GO
 ------------------------------------------------------------------------------------------
 
 
+
+
+------------------------------------------------------------------------------------------
+CREATE PROCEDURE GetRandIdCommand
+@id INT OUTPUT
+AS
+BEGIN
+	IF (SELECT count(Groups.Id) FROM Groups) > 0
+	BEGIN
+		SET @id = (SELECT TOP 1 Commands.Id
+				   FROM Commands
+				   WHERE Commands.Id NOT IN (SELECT Commands.Id
+						      				 FROM Commands, Groups
+											 WHERE Groups.CommandFk1 = Commands.Id OR Groups.CommandFk2 = Commands.Id OR Groups.CommandFk3 = Commands.Id OR Groups.CommandFk4 = Commands.Id)
+				   ORDER BY NEWID());
+	END
+	ELSE
+	BEGIN
+		SET @id = (SELECT TOP 1 Commands.Id
+				   FROM Commands
+				   ORDER BY NEWID());
+	END
+RETURN
+END
+GO
+------------------------------------------------------------------------------------------
+
+
+
+
+------------------------------------------------------------------------------------------
+CREATE PROCEDURE GetRandIdJudge
+@id INT OUTPUT
+AS
+BEGIN
+	SET @id = (SELECT TOP 1 Judges.Id
+			   FROM Judges
+			   ORDER BY NEWID());
+RETURN;
+END
+GO
+------------------------------------------------------------------------------------------
+
+
+
+
+------------------------------------------------------------------------------------------
+CREATE PROCEDURE GetRandIdStadium
+@id INT OUTPUT
+AS
+BEGIN
+	SET @id = (SELECT TOP 1 Stadiums.Id
+			   FROM Stadiums
+			   ORDER BY NEWID());
+RETURN
+END
+GO
+------------------------------------------------------------------------------------------
+
+
+
+
+------------------------------------------------------------------------------------------
+CREATE PROCEDURE FillGroups
+AS
+BEGIN
+	DECLARE @id INT;
+	SET @id = 0;
+	WHILE @id < 8
+	BEGIN
+		DECLARE @CommandFk1 INT;
+		EXECUTE GetRandIdCommand @CommandFk1 OUTPUT;
+
+		DECLARE @CommandFk2 INT;
+		EXECUTE GetRandIdCommand @CommandFk2 OUTPUT;
+
+		DECLARE @CommandFk3 INT;
+		EXECUTE GetRandIdCommand @CommandFk3 OUTPUT;
+
+		DECLARE @CommandFk4 INT;
+		EXECUTE GetRandIdCommand @CommandFk4 OUTPUT;
+
+		WHILE @CommandFk2 = @CommandFk1
+		BEGIN
+			EXECUTE GetRandIdCommand @CommandFk2 OUTPUT;
+		END
+
+		WHILE @CommandFk3 = @CommandFk1 OR @CommandFk3 = @CommandFk2
+		BEGIN
+			EXECUTE GetRandIdCommand @CommandFk3 OUTPUT;
+		END
+
+		WHILE @CommandFk4 = @CommandFk1 OR @CommandFk4 = @CommandFk2 OR @CommandFk4 = @CommandFk3
+		BEGIN
+			EXECUTE GetRandIdCommand @CommandFk4 OUTPUT;
+		END
+
+		INSERT INTO Groups(CommandFk1, CommandFk2, CommandFk3, CommandFk4)
+		VALUES(@CommandFk1, @CommandFk2, @CommandFk3, @CommandFk4);
+
+	SET @id+=1;
+	END
+END
+GO
+
+EXECUTE FillGroups;
+DROP PROCEDURE FillGroups;
+------------------------------------------------------------------------------------------
+
+
+
+
+------------------------------------------------------------------------------------------
+--CREATE PROCEDURE Replay
+--AS
+--BEGIN
+--	DECLARE @id INT;
+--	SET @id = 0;
+--	WHILE @id < 16
+--	BEGIN
+--		DECLARE @CommandFk1 INT;
+--		EXECUTE GetRandIdCommand @CommandFk1 OUTPUT;
+
+--		DECLARE @CommandFk2 INT;
+--		EXECUTE GetRandIdCommand @CommandFk2 OUTPUT;
+
+--		WHILE @CommandFk2 = @CommandFk1
+--		BEGIN
+--			EXECUTE GetRandIdCommand @CommandFk2 OUTPUT;
+--		END
+
+--		DECLARE @JudgeFk INT;
+--		EXECUTE GetRandIdJudge @JudgeFk OUTPUT;
+
+--		DECLARE @StadiumFk INT;
+--		EXECUTE GetRandIdStadium @StadiumFk OUTPUT;
+
+--		INSERT INTO Matches (Schedule, CommandFk1, CommandFk2, JudgeFk, StadiumFk)
+--		VALUES ('2020-04-15', @CommandFk1, @CommandFk2, @JudgeFk, @StadiumFk);
+
+--		SET @id += 1;
+--	END
+--END
+--DROP PROCEDURE Replay
+
+--EXECUTE Replay;
