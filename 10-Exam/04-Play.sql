@@ -179,10 +179,10 @@ BEGIN
 	SELECT @commandFk4 = Groups.CommandFk4 FROM Groups WHERE Groups.Id = @groupId;
 
 	DECLARE @judgeFk INT;
-	EXECUTE GetRandIdJudge @JudgeFk OUTPUT;
+	EXECUTE GetRandIdJudge @judgeFk OUTPUT;
 
 	DECLARE @stadiumFk INT;
-	EXECUTE GetRandIdStadium @StadiumFk OUTPUT;
+	EXECUTE GetRandIdStadium @stadiumFk OUTPUT;
 
 	IF((@id - 1)%6 = 0)
 	INSERT INTO Matches(Schedule, CommandFk1, CommandFk2, JudgeFk, StadiumFk)
@@ -386,222 +386,118 @@ GO
 
 EXECUTE CountPoints
 GO
-
 ------------------------------------------------------------------------------------------
 
- 
- 
 
 
 
 ------------------------------------------------------------------------------------------
-CREATE PROCEDURE CheckSimilarPoints
+EXECUTE CheckSimilarPoints
+GO
+------------------------------------------------------------------------------------------
+
+--SELECT GroupFk, PointsSum 
+--FROM Points
+--ORDER BY GroupFk, PointsSum DESC
+
+DROP PROC ChooseTwoFromGroup
+EXECUTE ChooseTwoFromGroup
+------------------------------------------------------------------------------------------
+CREATE PROCEDURE ChooseTwoFromGroup
 AS
 BEGIN
-
-DECLARE @pointsSum1 INT;
-DECLARE @pointsSum2 INT;
-DECLARE @pointsSum3 INT;
-DECLARE @pointsSum4 INT;
-
 DECLARE @index INT;
-SET @index = (SELECT TOP 1 Groups.Id FROM GROUPS)
+DECLARE @commandFk1 INT;
+DECLARE @commandFk2 INT;
+DECLARE @schedule DATETIME;
+DECLARE @date DATE;
+DECLARE @daysAdd INT;
+DECLARE @timeAdd INT;
+DECLARE @time TIME;
+DECLARE @judgeFk INT;
+DECLARE @stadiumFk INT;
 
-	WHILE (@index < (SELECT MAX(Groups.Id) FROM Groups))
+SET @date = (SELECT Schedule
+				 FROM Matches
+				 WHERE Matches.Id = (SELECT MAX (Matches.Id) FROM Matches));
+
+SET @time = '21:00:00.00';
+
+SET @index = (SELECT TOP 1 Groups.Id FROM Groups);
+ 
+	WHILE (@index <(SELECT MAX(Groups.Id) FROM Groups))
 	BEGIN
 
-	SET @pointsSum1 =   (SELECT TOP 1 PointsSum
-						FROM Points
-						WHERE GroupFk = @index
-						ORDER BY GroupFk ASC, PointsSum DESC);
+		SET @commandFk1 = (SELECT TOP 1 CommandFk 
+						   FROM Points
+						   WHERE GroupFk = @index
+						   ORDER BY PointsSum DESC);
 
-	SET @pointsSum2 =   (SELECT TOP 1 S.PS
-						FROM  
-						(SELECT TOP 2 PointsSum AS PS
-						FROM Points
-						WHERE GroupFk = @index
-						ORDER BY GroupFk ASC, PointsSum DESC) S
-						ORDER BY PS ASC);
-
-	SET @pointsSum3 =  (SELECT TOP 1 S.PS
-						FROM  
-						(SELECT TOP 2 PointsSum AS PS
-						FROM Points
-						WHERE GroupFk = @index
-						ORDER BY GroupFk ASC, PointsSum ASC) S
-						ORDER BY PS DESC);
-
-	SET @pointsSum4 =   (SELECT TOP 1 PointsSum
-						FROM Points
-						WHERE GroupFk = @index
-						ORDER BY GroupFk ASC, PointsSum ASC);
-
-		IF(@pointsSum1 = @pointsSum4)
-	BEGIN 
-
-		DECLARE @commandFk1 INT;
-		DECLARE @commandFk2 INT;
-		DECLARE @commandFk3 INT;
-		DECLARE @commandFk4 INT;
-		DECLARE @schedule DATETIME;
-
-	    SET @commandFk1 = (SELECT Groups.CommandFk1
-						   FROM Groups
-						   WHERE Groups.Id = @index);
-
-	    SET @commandFk2 = (SELECT Groups.CommandFk2
-						   FROM Groups
-						   WHERE Groups.Id = @index);
-
-		SET @commandFk3 = (SELECT Groups.CommandFk3
-						   FROM Groups
-						   WHERE Groups.Id = @index);
-
-		SET @commandFk4 = (SELECT Groups.CommandFk4
-						   FROM Groups
-						   WHERE Groups.Id = @index);
-		
-
-		SET @schedule =   (SELECT Schedule
-						   FROM Matches
-						   WHERE Matches.Id = (SELECT MAX (Matches.Id) FROM Matches));
-
-		
-		DECLARE @days INT;
-		SET @days = (SELECT FLOOR(RAND()*((10-1)+1)));
-
-		SELECT DATEADD(day, @days, @schedule);
-
-		DECLARE @judgeFk INT;
-		DECLARE @stadiumFk INT;
+		SET @commandFk2 = (SELECT TOP 1 CommandFk 
+						   FROM Points
+						   WHERE GroupFk = @index + 1
+						   ORDER BY PointsSum DESC);
 
 		EXECUTE GetRandIdJudge @judgeFk OUTPUT;
-		EXECUTE GetRandIdStadium @stadiumFk OUTPUT;
+		EXECUTE GetRandIdStadium @stadiumFk OUTPUT;	
 
-		INSERT INTO Matches(Schedule, CommandFk1, CommandFk2, JudgeFk, StadiumFk)
+		SET @daysAdd = (SELECT FLOOR(RAND()*((10-1)+1)));
+		SET @timeAdd = (SELECT FLOOR(RAND()*((24-18+1)+18)));
+		SET @date = (SELECT DATEADD(DAY, @daysAdd, @date));
+		SET @time = (SELECT DATEADD(hh, @timeAdd, @schedule));
+		--SET @schedule = (SELECT @date + @time);
+		SET @time = '21:00:00.00';
+
+		INSERT INTO Matches1s8(Schedule, CommandFk1, CommandFk2, JudgeFk, StadiumFk)
 		VALUES (@schedule, @commandFk1, @commandFk2, @judgeFk, @stadiumFk)
-		EXECUTE PlayConcreteCommands @commandFk1, @commandFk2
+
+
+
+		SET @commandFk1 = (SELECT TOP 1 t.CommandFk
+						   FROM	 (SELECT TOP 2 CommandFk, PointsSum
+								  FROM Points
+								  WHERE GroupFk = @index
+								  ORDER BY PointsSum DESC)t
+						   ORDER BY t.PointsSum ASC);
+
+		SET @commandFk2 = (SELECT TOP 1 t.CommandFk
+						   FROM	 (SELECT TOP 2 CommandFk, PointsSum
+								  FROM Points
+								  WHERE GroupFk = @index + 1
+								  ORDER BY PointsSum DESC)t
+						   ORDER BY t.PointsSum ASC);
 
 		EXECUTE GetRandIdJudge @judgeFk OUTPUT;
-		EXECUTE GetRandIdStadium @stadiumFk OUTPUT;
+		EXECUTE GetRandIdStadium @stadiumFk OUTPUT;	
 
-		INSERT INTO Matches(Schedule, CommandFk1, CommandFk2, JudgeFk, StadiumFk)
-		VALUES  (@schedule, @commandFk1, @commandFk3, @judgeFk, @stadiumFk)
-		EXECUTE PlayConcreteCommands @commandFk1, @commandFk3
+		SET @daysAdd = (SELECT FLOOR(RAND()*((10-1)+1)));
+		SET @timeAdd = (SELECT FLOOR(RAND()*((24-18+1)+18)));
+		SET @date = (SELECT DATEADD(DAY, @daysAdd, @date));
+		SET @time = (SELECT DATEADD(hh, @timeAdd, @schedule));
+	    --SET @schedule = (SELECT @date + @time);
+		SET @time = '21:00:00.00';
 
-		EXECUTE GetRandIdJudge @judgeFk OUTPUT;
-		EXECUTE GetRandIdStadium @stadiumFk OUTPUT;
 
-		INSERT INTO Matches(Schedule, CommandFk1, CommandFk2, JudgeFk, StadiumFk)
-		VALUES  (@schedule, @commandFk1, @commandFk4, @judgeFk, @stadiumFk)
-		EXECUTE PlayConcreteCommands @commandFk1, @commandFk4
+		INSERT INTO Matches1s8(Schedule, CommandFk1, CommandFk2, JudgeFk, StadiumFk)
+		VALUES (@schedule, @commandFk1, @commandFk2, @judgeFk, @stadiumFk)
 
-		EXECUTE GetRandIdJudge @judgeFk OUTPUT;
-		EXECUTE GetRandIdStadium @stadiumFk OUTPUT;
-
-		INSERT INTO Matches(Schedule, CommandFk1, CommandFk2, JudgeFk, StadiumFk)
-		VALUES  (@schedule, @commandFk2, @commandFk3, @judgeFk, @stadiumFk)
-		EXECUTE PlayConcreteCommands @commandFk2, @commandFk3
-
-		EXECUTE GetRandIdJudge @judgeFk OUTPUT;
-		EXECUTE GetRandIdStadium @stadiumFk OUTPUT;
-
-		INSERT INTO Matches(Schedule, CommandFk1, CommandFk2, JudgeFk, StadiumFk)
-		VALUES  (@schedule, @commandFk2, @commandFk4, @judgeFk, @stadiumFk)
-		EXECUTE PlayConcreteCommands @commandFk2, @commandFk4
-
-		EXECUTE GetRandIdJudge @judgeFk OUTPUT;
-		EXECUTE GetRandIdStadium @stadiumFk OUTPUT;
-
-		INSERT INTO Matches(Schedule, CommandFk1, CommandFk2, JudgeFk, StadiumFk)
-		VALUES  (@schedule, @commandFk3, @commandFk4, @judgeFk, @stadiumFk)
-		EXECUTE PlayConcreteCommands @commandFk3, @commandFk4
-
+		SET @index += 2;
 	END
-
-		IF(@pointsSum2 = @pointsSum3)
-		BEGIN
-		END
-
-		IF(@pointsSum1 = @pointsSum3)
-		BEGIN
-		END
-
-		IF(@pointsSum2 = @pointsSum4)
-		BEGIN
-		END
-
-		@index += 1;
-	END
-END
-GO
-------------------------------------------------------------------------------------------
-
- 
- 
-
-
-
-------------------------------------------------------------------------------------------
-CREATE PROCEDURE PlayConcreteCommands(@commandFk1 INT, @commandFk2 INT)
-AS
-BEGIN
-
-    DECLARE @command1Goals INT;
-	DECLARE @command2Goals INT;
-	DECLARE @result INT;
-	DECLARE @matchId INT;
-
-	SET @command1Goals = (SELECT FLOOR(RAND()*5));
-	SET @command2Goals = (SELECT FLOOR(RAND()*5));
-	
-	SET @result += CAST(@command1Goals AS NVARCHAR(2)) + ':' + CAST(@command2Goals AS NVARCHAR(2));
-
-	SET @matchId = (SELECT MAX(Matches.Id) FROM Matches)
-
-	IF(@command1Goals > @command2Goals)
-	BEGIN
-	INSERT INTO MatchResults(Id, WinnerFk, LooserFk, Result)
-	VALUES(@matchId, @commandFk1, @commandFk2, @result)
-	END
-
-	IF(@command2Goals > @command1Goals)
-	BEGIN
-	INSERT INTO MatchResults(Id, WinnerFk, LooserFk, Result)
-	VALUES(@matchId, @commandFk2, @commandFk1, @result)
-	END
-
-	If(@command1Goals = @command2Goals)
-	BEGIN
-	INSERT INTO MatchResults(Id, Result)
-	VALUES(@matchId, @result)
-	END
-
-	EXECUTE TopScorersFill @matchId, @commandFk1, @command1Goals;
-	EXECUTE TopScorersFill @matchId, @commandFk2, @command2Goals;
 
 END
 GO
-------------------------------------------------------------------------------------------
-
- 
  
 
 
 
-------------------------------------------------------------------------------------------
-CREATE PROCEDURE CountConcereteMatchPoints
-AS
-BEGIN
-END
 
 	--IF((SELECT MatchResults.LooserFk FROM MatchResults WHERE MatchResults.Id = @index) IS NOT NULL)
 	--BEGIN
 	--	SET @commandFk = (SELECT MatchResults.LooserFk FROM MatchResults WHERE MatchResults.Id = @index)
 
-	--	UPDATE Points 
-	--	SET PointsSum += 0
-	--	WHERE CommandFk = @commandFk 
+		--UPDATE Points 
+		--SET PointsSum += 0
+		--WHERE CommandFk = @commandFk 
 
 	--	SET @commandFk = (SELECT MatchResults.WinnerFk FROM MatchResults WHERE MatchResults.Id = @index)
 
@@ -624,22 +520,6 @@ END
 	--	WHERE CommandFk = @commandFk 
 
 	--END
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 --CREATE PROCEDURE MatchesOneEightProc
 --AS
