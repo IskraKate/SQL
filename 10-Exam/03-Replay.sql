@@ -2,7 +2,7 @@ USE FootballChampionship
 GO
 
 ------------------------------------------------------------------------------------------
-CREATE PROCEDURE CommandsReplay(@commandFk1 INT, @commandFk2 INT)
+CREATE PROCEDURE CommandsReplay(@commandFk1 INT, @commandFk2 INT, @matchType NVARCHAR(10))
 AS
 BEGIN
 
@@ -37,8 +37,8 @@ BEGIN
 	VALUES(@matchId, @result)
 	END
 
-	EXECUTE TopScorersFill @matchId, @commandFk1, @command1Goals;
-	EXECUTE TopScorersFill @matchId, @commandFk2, @command2Goals;
+	EXECUTE TopScorersFill @matchId, @commandFk1, @command1Goals, @matchType;
+	EXECUTE TopScorersFill @matchId, @commandFk2, @command2Goals, @matchType;
 
 END
 GO
@@ -114,14 +114,17 @@ BEGIN
 
 	DECLARE @judgeFk INT;
 	DECLARE @stadiumFk INT;
+	DECLARE @matchType NVARCHAR(10);
+
+	SET @matchType = 'Group';
 
 	EXECUTE GetRandIdJudge @judgeFk OUTPUT;
 	EXECUTE GetRandIdStadium @stadiumFk OUTPUT;
 
-	INSERT INTO Matches(Schedule, CommandFk1, CommandFk2, JudgeFk, StadiumFk)
-	VALUES (@schedule, @commandFk1, @commandFk2, @judgeFk, @stadiumFk)
+	INSERT INTO Matches(Schedule, CommandFk1, CommandFk2, JudgeFk, StadiumFk, MatchType)
+	VALUES (@schedule, @commandFk1, @commandFk2, @judgeFk, @stadiumFk, @matchType)
 
-	EXECUTE CommandsReplay @commandFk1, @commandFk2
+	EXECUTE CommandsReplay @commandFk1, @commandFk2, @matchType
 	EXECUTE CountMatchPointsReplay
 END
 GO
@@ -294,16 +297,10 @@ BEGIN
 			EXECUTE CheckSimilarPoints
 		END
 
-		
 		SET @index += 1;
 	END
 
 END
 GO
 ------------------------------------------------------------------------------------------
- 
- 
 
-
-
-------------------------------------------------------------------------------------------

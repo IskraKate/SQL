@@ -7,7 +7,7 @@ CREATE TABLE #ImportPositions
 )
 GO
 BULK INSERT #ImportPositions
-FROM 'C:\Users\katei\source\repos\sql-homework\10-Exam\Positions.txt'
+FROM 'C:\Users\katei\source\repos\sql-homework\10-Exam\TextFiles\Positions.txt'
 WITH 
 ( 
     ROWTERMINATOR = '\n'
@@ -33,7 +33,7 @@ CREATE TABLE #ImportEquipment
 )
 GO
 BULK INSERT #ImportEquipment
-FROM 'C:\Users\katei\source\repos\sql-homework\10-Exam\Equipment.txt'
+FROM 'C:\Users\katei\source\repos\sql-homework\10-Exam\TextFiles\Equipment.txt'
 WITH 
 ( 
     ROWTERMINATOR = '\n'
@@ -53,37 +53,13 @@ DROP TABLE #ImportEquipment
 
 
 ------------------------------------------------------------------------------------------
-CREATE TABLE #ImportEquipment
-(
-    [Name] VARCHAR(max)
-)
-GO
-BULK INSERT #ImportEquipment
-FROM 'C:\Users\katei\source\repos\sql-homework\10-Exam\Equipment.txt'
-WITH 
-( 
-    ROWTERMINATOR = '\n'
-)
-
-INSERT INTO Equipment([Name])
-SELECT #ImportEquipment.[Name]
-FROM #ImportEquipment
-GO
-
-DROP TABLE #ImportEquipment
-------------------------------------------------------------------------------------------
-
-
-
-
-------------------------------------------------------------------------------------------
 CREATE TABLE #ImportCountries
 (
     [Name] NVARCHAR(100)
 )
 GO
 BULK INSERT #ImportCountries
-FROM 'C:\Users\katei\source\repos\sql-homework\10-Exam\Countries.txt'
+FROM 'C:\Users\katei\source\repos\sql-homework\10-Exam\TextFiles\Countries.txt'
 WITH 
 ( 
     ROWTERMINATOR = '\n'
@@ -111,7 +87,7 @@ CREATE TABLE #ImportTrainers
 )
 GO
 BULK INSERT #ImportTrainers
-FROM 'C:\Users\katei\source\repos\sql-homework\10-Exam\Trainers.txt'
+FROM 'C:\Users\katei\source\repos\sql-homework\10-Exam\TextFiles\Trainers.txt'
 WITH 
 ( 	
 	FIELDTERMINATOR = '|',
@@ -139,7 +115,7 @@ CREATE TABLE #ImportCities
 )
 GO
 BULK INSERT #ImportCities
-FROM 'C:\Users\katei\source\repos\sql-homework\10-Exam\Cities.txt'
+FROM 'C:\Users\katei\source\repos\sql-homework\10-Exam\TextFiles\Cities.txt'
 WITH 
 ( 
 	FIELDTERMINATOR = '|',
@@ -168,7 +144,7 @@ CREATE TABLE #ImportStadiums
 )
 GO
 BULK INSERT #ImportStadiums
-FROM 'C:\Users\katei\source\repos\sql-homework\10-Exam\Stadiums.txt'
+FROM 'C:\Users\katei\source\repos\sql-homework\10-Exam\TextFiles\Stadiums.txt'
 WITH 
 ( 
 	FIELDTERMINATOR = '|',
@@ -197,7 +173,7 @@ CREATE TABLE #ImportCommands
 )
 GO
 BULK INSERT #ImportCommands
-FROM 'C:\Users\katei\source\repos\sql-homework\10-Exam\Commands.txt'
+FROM 'C:\Users\katei\source\repos\sql-homework\10-Exam\TextFiles\Commands.txt'
 WITH 
 ( 
 	FIELDTERMINATOR = '|',
@@ -230,7 +206,7 @@ CREATE TABLE #ImportPlayers
 )
 GO
 BULK INSERT #ImportPlayers
-FROM 'C:\Users\katei\source\repos\sql-homework\10-Exam\Players.txt'
+FROM 'C:\Users\katei\source\repos\sql-homework\10-Exam\TextFiles\Players.txt'
 WITH 
 ( 
 	FIELDTERMINATOR = '|',
@@ -255,7 +231,7 @@ CREATE TABLE #ImportAssociations
 )
 GO
 BULK INSERT #ImportAssociations
-FROM 'C:\Users\katei\source\repos\sql-homework\10-Exam\Associations.txt'
+FROM 'C:\Users\katei\source\repos\sql-homework\10-Exam\TextFiles\Associations.txt'
 WITH 
 ( 
 	FIELDTERMINATOR = '|',
@@ -282,7 +258,7 @@ CREATE TABLE #ImportJudges
 )
 GO
 BULK INSERT #ImportJudges
-FROM 'C:\Users\katei\source\repos\sql-homework\10-Exam\Judges.txt'
+FROM 'C:\Users\katei\source\repos\sql-homework\10-Exam\TextFiles\Judges.txt'
 WITH 
 ( 
 	FIELDTERMINATOR = '|',
@@ -310,7 +286,7 @@ CREATE TABLE #ImportDates
 )
 GO
 BULK INSERT #ImportDates
-FROM 'C:\Users\katei\source\repos\sql-homework\10-Exam\GroupTime.txt'
+FROM 'C:\Users\katei\source\repos\sql-homework\10-Exam\TextFiles\GroupTime.txt'
 WITH 
 ( 
 	FIELDTERMINATOR = '|',
@@ -319,7 +295,7 @@ WITH
 
 SELECT * FROM #ImportDates
 
-INSERT INTO Dates(Schedule)
+INSERT INTO DatesOfGroup(Schedule)
 SELECT #ImportDates.Schedule
 FROM #ImportDates
 GO
@@ -328,6 +304,113 @@ DROP TABLE #ImportDates
 GO
 ------------------------------------------------------------------------------------------
 
+
+
+
+------------------------------------------------------------------------------------------
+CREATE TABLE #ImportDates
+(
+	 Schedule Datetime
+)
+GO
+BULK INSERT #ImportDates
+FROM 'C:\Users\katei\source\repos\sql-homework\10-Exam\TextFiles\1s8Time.txt'
+WITH 
+( 
+	FIELDTERMINATOR = '|',
+    ROWTERMINATOR = '\n'
+)
+
+SELECT * FROM #ImportDates
+
+INSERT INTO DatesOf1s8(Schedule)
+SELECT #ImportDates.Schedule
+FROM #ImportDates
+GO
+
+DROP TABLE #ImportDates
+GO
+------------------------------------------------------------------------------------------
+
+
+
+
+------------------------------------------------------------------------------------------
+CREATE TABLE #ImportDates
+(
+	 Schedule Datetime
+)
+GO
+BULK INSERT #ImportDates
+FROM 'C:\Users\katei\source\repos\sql-homework\10-Exam\TextFiles\1s4Time.txt'
+WITH 
+(
+    ROWTERMINATOR = '\n'
+)
+
+SELECT * FROM #ImportDates
+
+INSERT INTO DatesOf1s4(Schedule)
+SELECT #ImportDates.Schedule
+FROM #ImportDates
+GO
+
+DROP TABLE #ImportDates
+GO
+------------------------------------------------------------------------------------------
+
+
+
+
+------------------------------------------------------------------------------------------
+CREATE TABLE #ImportDates
+(
+	 Schedule Datetime
+)
+GO
+BULK INSERT #ImportDates
+FROM 'C:\Users\katei\source\repos\sql-homework\10-Exam\TextFiles\1s2Time.txt'
+WITH 
+( 
+    ROWTERMINATOR = '\n'
+)
+
+SELECT * FROM #ImportDates
+
+INSERT INTO DatesOf1s2(Schedule)
+SELECT #ImportDates.Schedule
+FROM #ImportDates
+GO
+
+DROP TABLE #ImportDates
+GO
+------------------------------------------------------------------------------------------
+
+
+
+
+------------------------------------------------------------------------------------------
+CREATE TABLE #ImportDates
+(
+	 Schedule Datetime
+)
+GO
+BULK INSERT #ImportDates
+FROM 'C:\Users\katei\source\repos\sql-homework\10-Exam\TextFiles\FinalTime.txt'
+WITH 
+( 
+    ROWTERMINATOR = '\n'
+)
+
+SELECT * FROM #ImportDates
+
+INSERT INTO DatesOfFinal(Schedule)
+SELECT #ImportDates.Schedule
+FROM #ImportDates
+GO
+
+DROP TABLE #ImportDates
+GO
 
 
 
