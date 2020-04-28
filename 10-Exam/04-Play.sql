@@ -165,7 +165,7 @@ BEGIN
 
 	DECLARE @schedule DATETIME;
 	SET @schedule = dbo.GetTime(@id);
-	
+
 	DECLARE @commandFk1 INT;
 	SELECT @commandFk1 = Groups.CommandFk1 FROM Groups WHERE Groups.Id = @groupId;
 
@@ -184,32 +184,40 @@ BEGIN
 	DECLARE @stadiumFk INT;
 	EXECUTE GetRandIdStadium @stadiumFk OUTPUT;
 
+	DECLARE @minPeople INT;
+	DECLARE @maxPeople INT;
+	DECLARE @peopleCount INT;
+
+	SET @minPeople = FLOOR(0.5*(SELECT Stadiums.Capacity FROM Stadiums WHERE Stadiums.Id = @stadiumFk));
+	SET @maxPeople = (SELECT Stadiums.Capacity FROM Stadiums WHERE Stadiums.Id = @stadiumFk)
+	SET @peopleCount = (SELECT FLOOR(RAND(@maxPeople - @minPeople + 1) + @minPeople));
+
 	DECLARE @matchType NVARCHAR(10);
 	SET @matchType = 'Group';
 
 	IF((@id - 1)%6 = 0)
-	INSERT INTO Matches(Schedule, CommandFk1, CommandFk2, JudgeFk, StadiumFk, MatchType)
-	VALUES (@schedule, @commandFk1, @commandFk2, @judgeFk, @stadiumFk, @matchType)
+	INSERT INTO MatchesGroup(Schedule, CommandFk1, CommandFk2, JudgeFk, StadiumFk, MatchType, PeopleOnTheStadium)
+	VALUES (@schedule, @commandFk1, @commandFk2, @judgeFk, @stadiumFk, @matchType, @peopleCount)
 
 	IF((@id - 2)%6 = 0)
-	INSERT INTO Matches(Schedule, CommandFk1, CommandFk2, JudgeFk, StadiumFk, MatchType)
-	VALUES (@schedule, @commandFk1, @commandFk3, @judgeFk, @stadiumFk, @matchType)
+	INSERT INTO MatchesGroup(Schedule, CommandFk1, CommandFk2, JudgeFk, StadiumFk, MatchType, PeopleOnTheStadium)
+	VALUES (@schedule, @commandFk1, @commandFk3, @judgeFk, @stadiumFk, @matchType, @peopleCount)
 
 	IF((@id - 3)%6 = 0)
-	INSERT INTO Matches(Schedule, CommandFk1, CommandFk2, JudgeFk, StadiumFk, MatchType)
-	VALUES (@schedule, @commandFk1, @commandFk4, @judgeFk, @stadiumFk, @matchType)
+	INSERT INTO MatchesGroup(Schedule, CommandFk1, CommandFk2, JudgeFk, StadiumFk, MatchType, PeopleOnTheStadium)
+	VALUES (@schedule, @commandFk1, @commandFk4, @judgeFk, @stadiumFk, @matchType, @peopleCount)
 
 	IF((@id - 4)%6 = 0)
-	INSERT INTO Matches(Schedule, CommandFk1, CommandFk2, JudgeFk, StadiumFk, MatchType)
-	VALUES (@schedule, @commandFk2, @commandFk3, @judgeFk, @stadiumFk, @matchType)
+	INSERT INTO MatchesGroup(Schedule, CommandFk1, CommandFk2, JudgeFk, StadiumFk, MatchType, PeopleOnTheStadium)
+	VALUES (@schedule, @commandFk2, @commandFk3, @judgeFk, @stadiumFk, @matchType, @peopleCount)
 
 	IF((@id - 5)%6 = 0)
-	INSERT INTO Matches(Schedule, CommandFk1, CommandFk2, JudgeFk, StadiumFk, MatchType)
-	VALUES (@schedule, @commandFk2, @commandFk4, @judgeFk, @stadiumFk, @matchType)
+	INSERT INTO MatchesGroup(Schedule, CommandFk1, CommandFk2, JudgeFk, StadiumFk, MatchType, PeopleOnTheStadium)
+	VALUES (@schedule, @commandFk2, @commandFk4, @judgeFk, @stadiumFk, @matchType, @peopleCount)
 
 	IF(@id%6=0)
-	INSERT INTO Matches(Schedule, CommandFk1, CommandFk2, JudgeFk, StadiumFk, MatchType)
-	VALUES (@schedule, @commandFk3, @commandFk4, @judgeFk, @stadiumFk, @matchType)
+	INSERT INTO MatchesGroup(Schedule, CommandFk1, CommandFk2, JudgeFk, StadiumFk, MatchType, PeopleOnTheStadium)
+	VALUES (@schedule, @commandFk3, @commandFk4, @judgeFk, @stadiumFk, @matchType, @peopleCount)
 
 		
 	SET @id+=1;	
@@ -253,7 +261,7 @@ SET @index = @goals;
 				   WHERE Players.CommandFk = @commandFk
 				   ORDER BY NEWID())
     
-	SET @m = (SELECT FLOOR(RAND()*(90-1)+1));
+	SET @m = (SELECT FLOOR(RAND()*59));
 
 	IF(@m < 10)
 	BEGIN
@@ -313,7 +321,7 @@ GO
 
 
 ------------------------------------------------------------------------------------------
-CREATE PROCEDURE Play(@matchId INT, @commandFk1 INT, @commandFk2 INT, @matchType NVARCHAR(10))
+CREATE PROCEDURE PlayGroup(@matchId INT, @commandFk1 INT, @commandFk2 INT, @matchType NVARCHAR(10))
 AS
 BEGIN
 
@@ -322,7 +330,23 @@ DECLARE @command2Goals INT;
 
 SET @command1Goals = (SELECT FLOOR(RAND()*5));
 SET @command2Goals = (SELECT FLOOR(RAND()*5));
-	
+
+UPDATE Goals 
+SET GoalsCount += @command1Goals
+WHERE CommandFk = @commandFk1
+
+UPDATE Goals 
+SET GoalsCount += @command2Goals
+WHERE CommandFk = @commandFk2
+
+UPDATE GoalsScored
+SET GoalsCount += @command2Goals
+WHERE CommandFk = @commandFk1
+
+UPDATE GoalsScored
+SET GoalsCount += @command1Goals
+WHERE CommandFk = @commandFk2
+
 DECLARE @result NVARCHAR(5);
 SET @result = '';
 
@@ -330,19 +354,19 @@ SET @result += CAST(@command1Goals AS NVARCHAR(2)) + ':' + CAST(@command2Goals A
 
 IF(@command1Goals > @command2Goals)
 BEGIN
-INSERT INTO MatchResults(Id, WinnerFk, LooserFk, Result)
+INSERT INTO MatchGroupResults(Id, WinnerFk, LooserFk, Result)
 VALUES(@matchId, @commandFk1, @commandFk2, @result)
 END
 
 IF(@command2Goals > @command1Goals)
 BEGIN
-INSERT INTO MatchResults(Id, WinnerFk, LooserFk, Result)
+INSERT INTO MatchGroupResults(Id, WinnerFk, LooserFk, Result)
 VALUES(@matchId, @commandFk2, @commandFk1, @result)
 END
 
 If(@command1Goals = @command2Goals)
 BEGIN
-INSERT INTO MatchResults(Id, Result)
+INSERT INTO MatchGroupResults(Id, Result)
 VALUES(@matchId, @result)
 END
 
@@ -361,19 +385,19 @@ CREATE PROCEDURE PlayGroupMatches
 AS
 BEGIN
 	DECLARE @matchId INT;
-	SET @matchId = (SELECT TOP 1 Matches.Id FROM Matches)
-	WHILE (@matchId < ((SELECT MAX(Matches.Id) FROM Matches)+1) )
+	SET @matchId = (SELECT TOP 1 MatchesGroup.Id FROM MatchesGroup)
+	WHILE (@matchId < ((SELECT MAX(MatchesGroup.Id) FROM MatchesGroup)+1) )
 	BEGIN
 
 	DECLARE @commandFk1 INT;
 	DECLARE @commandFk2 INT;
 	DECLARE @matchType NVARCHAR(10);
 
-	SET @commandFk1 = (SELECT Matches.CommandFk1 FROM Matches WHERE Matches.Id = @matchId);
-	SET @commandFk2 = (SELECT Matches.CommandFk2 FROM Matches WHERE Matches.Id = @matchId);
-	SET @matchType =  (SELECT Matches.MatchType FROM Matches WHERE Matches.Id = @matchId)
+	SET @commandFk1 = (SELECT MatchesGroup.CommandFk1 FROM MatchesGroup WHERE MatchesGroup.Id = @matchId);
+	SET @commandFk2 = (SELECT MatchesGroup.CommandFk2 FROM MatchesGroup WHERE MatchesGroup.Id = @matchId);
+	SET @matchType =  (SELECT MatchesGroup.MatchType FROM MatchesGroup WHERE MatchesGroup.Id = @matchId)
 
-	EXEC Play @matchId, @commandFk1, @commandFk2, @matchType
+	EXEC PlayGroup @matchId, @commandFk1, @commandFk2, @matchType
 
 	SET @matchId += 1;
 	END
@@ -393,18 +417,19 @@ AS
 BEGIN
 DECLARE @index INT;
 DECLARE @commandFk INT;
-SET @index = (SELECT TOP 1 MatchResults.Id FROM MatchResults);
-WHILE @index < (SELECT MAX(MatchResults.Id) FROM MatchResults)
+
+SET @index = (SELECT TOP 1 MatchGroupResults.Id FROM MatchGroupResults);
+WHILE @index < (SELECT MAX(MatchGroupResults.Id) FROM MatchGroupResults)
 	BEGIN
-		IF((SELECT MatchResults.LooserFk FROM MatchResults WHERE MatchResults.Id = @index) IS NOT NULL)
+		IF((SELECT MatchGroupResults.LooserFk FROM MatchGroupResults WHERE MatchGroupResults.Id = @index) IS NOT NULL)
 		BEGIN
-			SET @commandFk = (SELECT MatchResults.LooserFk FROM MatchResults WHERE MatchResults.Id = @index)
+			SET @commandFk = (SELECT MatchGroupResults.LooserFk FROM MatchGroupResults WHERE MatchGroupResults.Id = @index)
 
 			UPDATE Points 
 			SET PointsSum += 0
 			WHERE CommandFk = @commandFk 
 
-			SET @commandFk = (SELECT MatchResults.WinnerFk FROM MatchResults WHERE MatchResults.Id = @index)
+			SET @commandFk = (SELECT MatchGroupResults.WinnerFk FROM MatchGroupResults WHERE MatchGroupResults.Id = @index)
 
 			UPDATE Points 
 			SET PointsSum += 3
@@ -412,13 +437,13 @@ WHILE @index < (SELECT MAX(MatchResults.Id) FROM MatchResults)
 		END
 		ELSE
 		BEGIN
-			SET @commandFk = (SELECT Matches.CommandFk1 FROM Matches WHERE Matches.Id = @index)
+			SET @commandFk = (SELECT MatchesGroup.CommandFk1 FROM MatchesGroup WHERE MatchesGroup.Id = @index)
 
 			UPDATE Points 
 			SET PointsSum += 1
 			WHERE CommandFk = @commandFk 
 
-			SET @commandFk = (SELECT Matches.CommandFk2 FROM Matches WHERE Matches.Id = @index)
+			SET @commandFk = (SELECT MatchesGroup.CommandFk2 FROM MatchesGroup WHERE MatchesGroup.Id = @index)
 
 			UPDATE Points 
 			SET PointsSum += 1
@@ -430,7 +455,7 @@ WHILE @index < (SELECT MAX(MatchResults.Id) FROM MatchResults)
 END
 GO
 
-EXECUTE CountPoints
+EXECUTE CountPoints;
 GO
 ------------------------------------------------------------------------------------------
 
@@ -438,7 +463,7 @@ GO
 
 
 ------------------------------------------------------------------------------------------
-EXECUTE CheckSimilarPoints
+EXECUTE CheckSimilarPoints;
 GO
 ------------------------------------------------------------------------------------------
 
@@ -475,8 +500,11 @@ DECLARE @schedule DATETIME;
 DECLARE @judgeFk INT;
 DECLARE @stadiumFk INT;
 DECLARE @matchType NVARCHAR(10);
+DECLARE @scheduleindex INT;
 
 SET @matchType = '1/8';
+
+SET @scheduleIndex = (SELECT TOP 1 DatesOf1s8.Id FROM DatesOf1s8)
 
 SET @index = (SELECT TOP 1 Groups.Id FROM Groups);
  
@@ -496,11 +524,18 @@ SET @index = (SELECT TOP 1 Groups.Id FROM Groups);
 		EXECUTE GetRandIdJudge @judgeFk OUTPUT;
 		EXECUTE GetRandIdStadium @stadiumFk OUTPUT;	
 
+		DECLARE @minPeople INT;
+		DECLARE @maxPeople INT;
+		DECLARE @peopleCount INT;
 
-		SET @schedule = dbo.Get1s8Time(@index);
+		SET @minPeople = FLOOR(0.5*(SELECT Stadiums.Capacity FROM Stadiums WHERE Stadiums.Id = @stadiumFk));
+		SET @maxPeople = (SELECT Stadiums.Capacity FROM Stadiums WHERE Stadiums.Id = @stadiumFk)
+		SET @peopleCount = (SELECT FLOOR(RAND(@maxPeople - @minPeople + 1) + @minPeople));
+		
+		SET @schedule = dbo.Get1s8Time(@scheduleIndex);
 
-		INSERT INTO Matches1s8(Schedule, CommandFk1, CommandFk2, JudgeFk, StadiumFk, MatchType)
-		VALUES (@schedule, @commandFk1, @commandFk2, @judgeFk, @stadiumFk, @matchType)
+		INSERT INTO Matches1s8(Schedule, CommandFk1, CommandFk2, JudgeFk, StadiumFk, MatchType, PeopleOnTheStadium)
+		VALUES (@schedule, @commandFk1, @commandFk2, @judgeFk, @stadiumFk, @matchType, @peopleCount)
 
 
 
@@ -521,18 +556,23 @@ SET @index = (SELECT TOP 1 Groups.Id FROM Groups);
 		EXECUTE GetRandIdJudge @judgeFk OUTPUT;
 		EXECUTE GetRandIdStadium @stadiumFk OUTPUT;	
 
-		SET @schedule = dbo.Get1s8Time(@index + 1);
+		SET @minPeople = FLOOR(0.5*(SELECT Stadiums.Capacity FROM Stadiums WHERE Stadiums.Id = @stadiumFk));
+		SET @maxPeople = (SELECT Stadiums.Capacity FROM Stadiums WHERE Stadiums.Id = @stadiumFk)
+		SET @peopleCount = (SELECT FLOOR(RAND(@maxPeople - @minPeople + 1) + @minPeople));
 
-		INSERT INTO Matches1s8(Schedule, CommandFk1, CommandFk2, JudgeFk, StadiumFk, MatchType)
-		VALUES (@schedule, @commandFk1, @commandFk2, @judgeFk, @stadiumFk, @matchType)
+		SET @schedule = dbo.Get1s8Time(@scheduleIndex + 1);
+
+		INSERT INTO Matches1s8(Schedule, CommandFk1, CommandFk2, JudgeFk, StadiumFk, MatchType, PeopleOnTheStadium)
+		VALUES (@schedule, @commandFk1, @commandFk2, @judgeFk, @stadiumFk, @matchType, @peopleCount)
 
 		SET @index += 2;
+		SET @scheduleindex +=2;
 	END
 
 END
 GO
 
-EXEC Fill1s8Matches
+EXEC Fill1s8Matches;
 GO
 ------------------------------------------------------------------------------------------
 
@@ -549,7 +589,23 @@ DECLARE @command2Goals INT;
 
 SET @command1Goals = (SELECT FLOOR(RAND()*5));
 SET @command2Goals = (SELECT FLOOR(RAND()*5));
-	
+
+UPDATE Goals 
+SET GoalsCount += @command1Goals
+WHERE CommandFk = @commandFk1
+
+UPDATE Goals 
+SET GoalsCount += @command2Goals
+WHERE CommandFk = @commandFk2
+
+UPDATE GoalsScored
+SET GoalsCount += @command2Goals
+WHERE CommandFk = @commandFk1
+
+UPDATE GoalsScored
+SET GoalsCount += @command1Goals
+WHERE CommandFk = @commandFk2
+
 DECLARE @result NVARCHAR(5);
 SET @result = '';
 
@@ -643,6 +699,8 @@ GO
 CREATE PROCEDURE Fill1s4Matches
 AS
 BEGIN
+DECLARE @id INT;
+DECLARE @maxId INT;
 DECLARE @index INT;
 DECLARE @maxIndex INT;
 DECLARE @judgeFk INT;
@@ -652,25 +710,41 @@ DECLARE @commandFk1 INT;
 DECLARE @commandFk2 INT;
 DECLARE @matchType NVARCHAR(10);
 
-SET @index = (SELECT TOP 1 (Match1s8Results.Id) FROM Match1s8Results)
-SET @maxIndex = (SELECT MAX(Match1s8Results.Id) FROM Match1s8Results);
+DECLARE @scheduleindex INT;
+SET @scheduleIndex = (SELECT TOP 1 DatesOf1s4.Id FROM DatesOf1s4)
+
+SET @id = (SELECT TOP 1 (Match1s8Results.Id) FROM Match1s8Results)
+SET @maxId = (SELECT MAX(Match1s8Results.Id) FROM Match1s8Results);
+
+SET @index = 1;
+SET @maxIndex = (@maxId - @id + 1 )/2;
+
 SET @matchType = '1/4';
 
-WHILE (@index < ((@maxIndex/2) + 1))
+WHILE (@index <=  @maxIndex)
 BEGIN 
-
-		SET @schedule = dbo.Get1s4Time(@index);
+		SET @schedule = dbo.Get1s4Time(@scheduleIndex);
 
 		EXECUTE GetRandIdJudge @judgeFk OUTPUT;
 		EXECUTE GetRandIdStadium @stadiumFk OUTPUT;	
 
-		SET @commandFk1 = (SELECT WinnerFk FROM Match1s8Results WHERE Match1s8Results.Id = @index);
-		SET @commandFk2 = (SELECT WinnerFk FROM Match1s8Results WHERE Match1s8Results.Id = ((@maxIndex + 1) - @index));
+		DECLARE @minPeople INT;
+		DECLARE @maxPeople INT;
+		DECLARE @peopleCount INT;
 
-		INSERT INTO Matches1s4(Schedule, CommandFk1, CommandFk2, JudgeFk, StadiumFk, MatchType) 
-		VALUES (@schedule, @commandFk1, @commandFk2, @judgeFk, @stadiumFk, @matchType);
+		SET @minPeople = FLOOR(0.5*(SELECT Stadiums.Capacity FROM Stadiums WHERE Stadiums.Id = @stadiumFk));
+		SET @maxPeople = (SELECT Stadiums.Capacity FROM Stadiums WHERE Stadiums.Id = @stadiumFk)
+		SET @peopleCount = (SELECT FLOOR(RAND(@maxPeople - @minPeople + 1) + @minPeople));
+
+		SET @commandFk1 = (SELECT WinnerFk FROM Match1s8Results WHERE Match1s8Results.Id = @id);
+		SET @commandFk2 = (SELECT WinnerFk FROM Match1s8Results WHERE Match1s8Results.Id = ((@maxId + 1) - @index));
+
+		INSERT INTO Matches1s4(Schedule, CommandFk1, CommandFk2, JudgeFk, StadiumFk, MatchType, PeopleOnTheStadium) 
+		VALUES (@schedule, @commandFk1, @commandFk2, @judgeFk, @stadiumFk, @matchType, @peopleCount);
 
 		SET @index += 1;
+		SET @id += 1;
+		SET @scheduleindex +=1;
 
 	END
 END
@@ -693,6 +767,22 @@ DECLARE @command2Goals INT;
 
 SET @command1Goals = (SELECT FLOOR(RAND()*5));
 SET @command2Goals = (SELECT FLOOR(RAND()*5));
+
+UPDATE Goals 
+SET GoalsCount += @command1Goals
+WHERE CommandFk = @commandFk1
+
+UPDATE Goals 
+SET GoalsCount += @command2Goals
+WHERE CommandFk = @commandFk2
+
+UPDATE GoalsScored
+SET GoalsCount += @command2Goals
+WHERE CommandFk = @commandFk1
+
+UPDATE GoalsScored
+SET GoalsCount += @command1Goals
+WHERE CommandFk = @commandFk2
 	
 DECLARE @result NVARCHAR(5);
 SET @result = '';
@@ -794,27 +884,46 @@ DECLARE @stadiumFk INT;
 DECLARE @schedule DATETIME;
 DECLARE @commandFk1 INT;
 DECLARE @commandFk2 INT;
+DECLARE @id INT;
+DECLARE @maxId INT;
 DECLARE @matchType NVARCHAR(10);
+DECLARE @scheduleindex INT;
 
-SET @index = (SELECT TOP 1 (Match1s4Results.Id) FROM Match1s4Results)
-SET @maxIndex = (SELECT MAX(Match1s4Results.Id) FROM Match1s4Results);
+SET @scheduleIndex = (SELECT TOP 1 DatesOf1s2.Id FROM DatesOf1s2)
+
+SET @id = (SELECT TOP 1 (Match1s4Results.Id) FROM Match1s4Results)
+SET @maxId = (SELECT MAX(Match1s4Results.Id) FROM Match1s4Results);
+
+SET @index = 1;
+SET @maxIndex = (@maxId - @id + 1 )/2;
+
 SET @matchType = '1/2';
 
-WHILE (@index < ((@maxIndex/2) + 1))
+WHILE (@index <=  @maxIndex)
 BEGIN 
 
-		SET @schedule = dbo.Get1s2Time(@index);
+		SET @schedule = dbo.Get1s2Time(@scheduleindex);
 
 		EXECUTE GetRandIdJudge @judgeFk OUTPUT;
 		EXECUTE GetRandIdStadium @stadiumFk OUTPUT;	
 
-		SET @commandFk1 = (SELECT WinnerFk FROM Match1s4Results WHERE Match1s4Results.Id = @index);
-		SET @commandFk2 = (SELECT WinnerFk FROM Match1s4Results WHERE Match1s4Results.Id = ((@maxIndex + 1) - @index));
+		DECLARE @minPeople INT;
+		DECLARE @maxPeople INT;
+		DECLARE @peopleCount INT;
 
-		INSERT INTO Matches1s2(Schedule, CommandFk1, CommandFk2, JudgeFk, StadiumFk, MatchType) 
-		VALUES (@schedule, @commandFk1, @commandFk2, @judgeFk, @stadiumFk, @matchType);
+		SET @minPeople = FLOOR(0.5*(SELECT Stadiums.Capacity FROM Stadiums WHERE Stadiums.Id = @stadiumFk));
+		SET @maxPeople = (SELECT Stadiums.Capacity FROM Stadiums WHERE Stadiums.Id = @stadiumFk)
+		SET @peopleCount = (SELECT FLOOR(RAND(@maxPeople - @minPeople + 1) + @minPeople));
+
+		SET @commandFk1 = (SELECT WinnerFk FROM Match1s4Results WHERE Match1s4Results.Id = @id);
+		SET @commandFk2 = (SELECT WinnerFk FROM Match1s4Results WHERE Match1s4Results.Id = ((@maxId + 1) - @index));
+
+		INSERT INTO Matches1s2(Schedule, CommandFk1, CommandFk2, JudgeFk, StadiumFk, MatchType, PeopleOnTheStadium) 
+		VALUES (@schedule, @commandFk1, @commandFk2, @judgeFk, @stadiumFk, @matchType, @peopleCount);
 
 		SET @index += 1;
+		SET @id += 1;
+		SET @scheduleindex += 1;
 
 	END
 END
@@ -837,7 +946,23 @@ DECLARE @command2Goals INT;
 
 SET @command1Goals = (SELECT FLOOR(RAND()*5));
 SET @command2Goals = (SELECT FLOOR(RAND()*5));
-	
+
+UPDATE Goals 
+SET GoalsCount += @command1Goals
+WHERE CommandFk = @commandFk1
+
+UPDATE Goals 
+SET GoalsCount += @command2Goals
+WHERE CommandFk = @commandFk2
+
+UPDATE GoalsScored
+SET GoalsCount += @command2Goals
+WHERE CommandFk = @commandFk1
+
+UPDATE GoalsScored
+SET GoalsCount += @command1Goals
+WHERE CommandFk = @commandFk2
+
 DECLARE @result NVARCHAR(5);
 SET @result = '';
 
@@ -939,32 +1064,47 @@ DECLARE @schedule DATETIME;
 DECLARE @commandFk1 INT;
 DECLARE @commandFk2 INT;
 DECLARE @matchType NVARCHAR(10);
+DECLARE @scheduleindex INT;
+
+SET @scheduleIndex = (SELECT TOP 1 DatesOfFinal.Id FROM DatesOfFinal)
 
 SET @index = (SELECT TOP 1 (Match1s2Results.Id) FROM Match1s2Results)
 SET @maxIndex = (SELECT MAX(Match1s2Results.Id) FROM Match1s2Results);
 SET @matchType = 'Final';
 
-SET @schedule = dbo.GetFinalTime(@index);
+SET @schedule = dbo.GetFinalTime(@scheduleIndex);
 
 EXECUTE GetRandIdJudge @judgeFk OUTPUT;
 EXECUTE GetRandIdStadium @stadiumFk OUTPUT;	
+
+DECLARE @minPeople INT;
+DECLARE @maxPeople INT;
+DECLARE @peopleCount INT;
+
+SET @minPeople = FLOOR(0.5*(SELECT Stadiums.Capacity FROM Stadiums WHERE Stadiums.Id = @stadiumFk));
+SET @maxPeople = (SELECT Stadiums.Capacity FROM Stadiums WHERE Stadiums.Id = @stadiumFk)
+SET @peopleCount = (SELECT FLOOR(RAND(@maxPeople - @minPeople + 1) + @minPeople));
 
 SET @commandFk1 = (SELECT WinnerFk FROM Match1s2Results WHERE Match1s2Results.Id = @index);
 SET @commandFk2 = (SELECT WinnerFk FROM Match1s2Results WHERE Match1s2Results.Id = @maxIndex);
 
-INSERT INTO MatchesFinal(Schedule, CommandFk1, CommandFk2, JudgeFk, StadiumFk, MatchType) 
-VALUES (@schedule, @commandFk1, @commandFk2, @judgeFk, @stadiumFk, @matchType);
+INSERT INTO MatchesFinal(Schedule, CommandFk1, CommandFk2, JudgeFk, StadiumFk, MatchType, PeopleOnTheStadium) 
+VALUES (@schedule, @commandFk1, @commandFk2, @judgeFk, @stadiumFk, @matchType, @peopleCount);
 
-SET @schedule = dbo.GetFinalTime(@maxIndex);
+SET @schedule = dbo.GetFinalTime(@scheduleIndex + 1);
 
 EXECUTE GetRandIdJudge @judgeFk OUTPUT;
 EXECUTE GetRandIdStadium @stadiumFk OUTPUT;	
 
+SET @minPeople = FLOOR(0.5*(SELECT Stadiums.Capacity FROM Stadiums WHERE Stadiums.Id = @stadiumFk));
+SET @maxPeople = (SELECT Stadiums.Capacity FROM Stadiums WHERE Stadiums.Id = @stadiumFk)
+SET @peopleCount = (SELECT FLOOR(RAND(@maxPeople - @minPeople + 1) + @minPeople));
+
 SET @commandFk1 = (SELECT LooserFk FROM Match1s2Results WHERE Match1s2Results.Id = @index);
 SET @commandFk2 = (SELECT LooserFk FROM Match1s2Results WHERE Match1s2Results.Id = @maxIndex);
 
-INSERT INTO MatchesFinal(Schedule, CommandFk1, CommandFk2, JudgeFk, StadiumFk, MatchType) 
-VALUES (@schedule, @commandFk1, @commandFk2, @judgeFk, @stadiumFk, @matchType);
+INSERT INTO MatchesFinal(Schedule, CommandFk1, CommandFk2, JudgeFk, StadiumFk, MatchType, PeopleOnTheStadium) 
+VALUES (@schedule, @commandFk1, @commandFk2, @judgeFk, @stadiumFk, @matchType, @peopleCount);
  
 END
 GO
@@ -986,7 +1126,23 @@ DECLARE @command2Goals INT;
 
 SET @command1Goals = (SELECT FLOOR(RAND()*5));
 SET @command2Goals = (SELECT FLOOR(RAND()*5));
-	
+
+UPDATE Goals 
+SET GoalsCount += @command1Goals
+WHERE CommandFk = @commandFk1
+
+UPDATE Goals 
+SET GoalsCount += @command2Goals
+WHERE CommandFk = @commandFk2
+
+UPDATE GoalsScored
+SET GoalsCount += @command2Goals
+WHERE CommandFk = @commandFk1
+
+UPDATE GoalsScored
+SET GoalsCount += @command1Goals
+WHERE CommandFk = @commandFk2
+
 DECLARE @result NVARCHAR(5);
 SET @result = '';
 

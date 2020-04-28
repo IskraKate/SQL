@@ -13,27 +13,43 @@ BEGIN
 
 	SET @command1Goals = (SELECT FLOOR(RAND()*5));
 	SET @command2Goals = (SELECT FLOOR(RAND()*5));
+	
+	UPDATE Goals 
+	SET GoalsCount += @command1Goals
+	WHERE CommandFk = @commandFk1
+
+	UPDATE Goals 
+	SET GoalsCount += @command2Goals
+	WHERE CommandFk = @commandFk2
+	
+	UPDATE GoalsScored
+	SET GoalsCount += @command2Goals
+	WHERE CommandFk = @commandFk1
+
+	UPDATE GoalsScored
+	SET GoalsCount += @command1Goals
+	WHERE CommandFk = @commandFk2
 
 	SET @result = '';
 	SET @result += CAST(@command1Goals AS NVARCHAR(2)) + ':' + CAST(@command2Goals AS NVARCHAR(2));
 
-	SET @matchId = (SELECT MAX(Matches.Id) FROM Matches)
+	SET @matchId = (SELECT MAX(MatchesGroup.Id) FROM MatchesGroup)
 
 	IF(@command1Goals > @command2Goals)
 	BEGIN
-	INSERT INTO MatchResults(Id, WinnerFk, LooserFk, Result)
+	INSERT INTO MatchGroupResults(Id, WinnerFk, LooserFk, Result)
 	VALUES(@matchId, @commandFk1, @commandFk2, @result)
 	END
 
 	IF(@command2Goals > @command1Goals)
 	BEGIN
-	INSERT INTO MatchResults(Id, WinnerFk, LooserFk, Result)
+	INSERT INTO MatchGroupResults(Id, WinnerFk, LooserFk, Result)
 	VALUES(@matchId, @commandFk2, @commandFk1, @result)
 	END
 
 	If(@command1Goals = @command2Goals)
 	BEGIN
-	INSERT INTO MatchResults(Id, Result)
+	INSERT INTO MatchGroupResults(Id, Result)
 	VALUES(@matchId, @result)
 	END
 
@@ -55,35 +71,37 @@ AS
 
 DECLARE @commandFk INT;
 
-SET @commandFk = (SELECT MatchResults.LooserFk 
-				  FROM MatchResults
-				  WHERE MatchResults.Id = (SELECT MAX(Matches.Id) FROM Matches))	
+SET @commandFk = (SELECT MatchGroupResults.LooserFk 
+				  FROM MatchGroupResults
+				  WHERE MatchGroupResults.Id = (SELECT MAX(MatchesGroup.Id) FROM MatchesGroup))	
 
-	IF(@commandFk IS NOT NULL)
-	BEGIN
+IF(@commandFk IS NOT NULL)
+BEGIN
 
 	UPDATE Points 
 	SET PointsSum += 0
 	WHERE CommandFk = @commandFk 
 	
 
-SET @commandFk = (SELECT MatchResults.WinnerFk 
-				  FROM MatchResults
-				  WHERE MatchResults.Id = (SELECT MAX(Matches.Id) FROM Matches))
+SET @commandFk = (SELECT MatchGroupResults.WinnerFk 
+				  FROM MatchGroupResults
+				  WHERE MatchGroupResults.Id = (SELECT MAX(MatchesGroup.Id) FROM MatchesGroup))
 
 	UPDATE Points 
 	SET PointsSum += 3
 	WHERE CommandFk = @commandFk 
-	END
-	ELSE 
-	BEGIN
-	SET @commandFk = (SELECT Matches.CommandFk1 FROM Matches WHERE Matches.Id = (SELECT MAX(Matches.Id) FROM Matches))
+
+END
+ELSE 
+BEGIN
+
+	SET @commandFk = (SELECT MatchesGroup.CommandFk1 FROM MatchesGroup WHERE MatchesGroup.Id = (SELECT MAX(MatchesGroup.Id) FROM MatchesGroup))
 
 	UPDATE Points 
 	SET PointsSum += 1
 	WHERE CommandFk = @commandFk 
 
-	SET @commandFk = (SELECT Matches.CommandFk2 FROM Matches WHERE Matches.Id = (SELECT MAX(Matches.Id) FROM Matches))
+	SET @commandFk = (SELECT MatchesGroup.CommandFk2 FROM MatchesGroup WHERE MatchesGroup.Id = (SELECT MAX(MatchesGroup.Id) FROM MatchesGroup))
 
 	UPDATE Points 
 	SET PointsSum += 1
@@ -104,8 +122,8 @@ AS
 BEGIN 
 	DECLARE @schedule DATETIME;
 	SET @schedule =   (SELECT Schedule
-						FROM Matches
-						WHERE Matches.Id = (SELECT MAX (Matches.Id) FROM Matches));
+						FROM MatchesGroup
+						WHERE MatchesGroup.Id = (SELECT MAX (MatchesGroup.Id) FROM MatchesGroup));
 
 	DECLARE @days INT;
 	SET @days = (SELECT FLOOR(RAND()*((10-1)+1)));
@@ -121,8 +139,16 @@ BEGIN
 	EXECUTE GetRandIdJudge @judgeFk OUTPUT;
 	EXECUTE GetRandIdStadium @stadiumFk OUTPUT;
 
-	INSERT INTO Matches(Schedule, CommandFk1, CommandFk2, JudgeFk, StadiumFk, MatchType)
-	VALUES (@schedule, @commandFk1, @commandFk2, @judgeFk, @stadiumFk, @matchType)
+	DECLARE @minPeople INT;
+	DECLARE @maxPeople INT;
+	DECLARE @peopleCount INT;
+
+	SET @minPeople = FLOOR(0.5*(SELECT Stadiums.Capacity FROM Stadiums WHERE Stadiums.Id = @stadiumFk));
+	SET @maxPeople = (SELECT Stadiums.Capacity FROM Stadiums WHERE Stadiums.Id = @stadiumFk)
+	SET @peopleCount = (SELECT FLOOR(RAND(@maxPeople - @minPeople + 1) + @minPeople));
+
+	INSERT INTO MatchesGroup(Schedule, CommandFk1, CommandFk2, JudgeFk, StadiumFk, MatchType, PeopleOnTheStadium)
+	VALUES (@schedule, @commandFk1, @commandFk2, @judgeFk, @stadiumFk, @matchType, @peopleCount)
 
 	EXECUTE CommandsReplay @commandFk1, @commandFk2, @matchType
 	EXECUTE CountMatchPointsReplay

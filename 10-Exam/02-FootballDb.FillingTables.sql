@@ -18,8 +18,6 @@ SELECT #ImportPositions.[Name]
 FROM #ImportPositions
 GO
 
-SELECT * FROM Positions
-
 DROP TABLE #ImportPositions
 ------------------------------------------------------------------------------------------
 
@@ -38,8 +36,6 @@ WITH
 ( 
     ROWTERMINATOR = '\n'
 )
-
-SELECT * FROM  #ImportEquipment
 
 INSERT INTO Equipment([Name])
 SELECT #ImportEquipment.[Name]
@@ -65,8 +61,6 @@ WITH
     ROWTERMINATOR = '\n'
 )
 
-SELECT * FROM  #ImportCountries
-
 INSERT INTO Countries([Name])
 SELECT #ImportCountries.[Name]
 FROM #ImportCountries
@@ -81,8 +75,8 @@ DROP TABLE #ImportCountries
 ------------------------------------------------------------------------------------------
 CREATE TABLE #ImportTrainers
 (	
+    Id INT,
 	CountryFk int,
-	CountryFkChamp int,
     [Name] NVARCHAR(100)
 )
 GO
@@ -93,12 +87,35 @@ WITH
 	FIELDTERMINATOR = '|',
     ROWTERMINATOR = '\n'
 )
+GO
 
-SELECT * FROM  #ImportTrainers
+CREATE PROCEDURE FillTrainers
+AS
+BEGIN
 
-INSERT INTO Trainers([Name], CountryFk, CountryChampFk)
-SELECT #ImportTrainers.[Name], #ImportTrainers.CountryFk, #ImportTrainers.CountryFkChamp
-FROM #ImportTrainers
+DECLARE @index INT;
+SET @index = (SELECT TOP 1 #ImportTrainers.Id FROM #ImportTrainers)
+
+DECLARE @maxIndex INT;
+SET @maxIndex = (SELECT MAX(#ImportTrainers.Id) FROM #ImportTrainers)
+
+
+WHILE(@index <  @maxIndex)
+BEGIN
+	 
+    INSERT INTO Trainers([Name], CountryFk, CountryChampFk)
+	SELECT #ImportTrainers.[Name], #ImportTrainers.CountryFk, t.ctry
+	FROM #ImportTrainers, (SELECT TOP 1 Countries.Id AS ctry FROM Countries ORDER BY NEWID()) t
+	WHERE #ImportTrainers.Id = @index
+
+	SET @index +=1;
+
+END
+
+END
+GO
+
+EXECUTE FillTrainers;
 GO
 
 DROP TABLE #ImportTrainers
@@ -121,8 +138,6 @@ WITH
 	FIELDTERMINATOR = '|',
     ROWTERMINATOR = '\n'
 )
-
-SELECT * FROM  #ImportCities
 
 INSERT INTO Cities([Name], CountryFk)
 SELECT #ImportCities.[Name], #ImportCities.CountryFk
@@ -151,58 +166,89 @@ WITH
     ROWTERMINATOR = '\n'
 )
 
-SELECT * FROM  #ImportStadiums
-
 INSERT INTO Stadiums([Name], CityFk, Capacity)
 SELECT #ImportStadiums.[Name], #ImportStadiums.CityFk, #ImportStadiums.Capacity
 FROM #ImportStadiums
 GO
 
 DROP TABLE #ImportStadiums
+GO
 ------------------------------------------------------------------------------------------
 
 
 
 
 ------------------------------------------------------------------------------------------
-CREATE TABLE #ImportCommands
-(
-	CountryFk int,
-    TrainerFk VARCHAR(max),
-	EquipmentFk int
-)
-GO
-BULK INSERT #ImportCommands
-FROM 'C:\Users\katei\source\repos\sql-homework\10-Exam\TextFiles\Commands.txt'
-WITH 
-( 
-	FIELDTERMINATOR = '|',
-    ROWTERMINATOR = '\n'
-)
+CREATE PROCEDURE FillRndCommands
+AS
+BEGIN
 
-INSERT INTO Commands(CountryFk, TrainerFk, EquipmentFk)
-SELECT #ImportCommands.CountryFk, #ImportCommands.TrainerFk, #ImportCommands.EquipmentFk
-FROM #ImportCommands
+DECLARE @index INT;
+SET @index = 32
+
+WHILE(@index >  0)
+BEGIN
+	INSERT INTO Commands(CountryFk, TrainerFk, EquipmentFk)
+	SELECT t1.Country, t1.Trainer, t2.Equipment
+	FROM (SELECT Trainers.CountryFk AS Country, t.trn AS Trainer
+		  FROM Trainers, (SELECT TOP 1 Trainers.Id trn 
+						  FROM Trainers		
+						  ORDER BY NEWID())t  
+		  WHERE Trainers.Id = t.trn) t1,
+		 (SELECT TOP 1 Equipment.Id AS Equipment FROM Equipment ORDER BY NEWID()) t2
+	SET @index -=1;
+END
+
+END
 GO
 
+EXECUTE FillRndCommands;
+GO
+
+CREATE PROCEDURE FillPointsNulls
+AS
+BEGIN
 INSERT INTO Points(CommandFk, PointsSum)
 SELECT Commands.Id, 0
 FROM Commands
+END
 GO
 
-DROP TABLE #ImportCommands
+CREATE PROCEDURE FillGoalsNulls
+AS 
+BEGIN
+INSERT INTO Goals(CommandFk, GoalsCount)
+SELECT Commands.Id, 0
+FROM Commands
+END
 GO
+
+CREATE PROCEDURE FillGoalsScoredNulls
+AS 
+BEGIN
+INSERT INTO GoalsScored(CommandFk, GoalsCount)
+SELECT Commands.Id, 0
+FROM Commands
+END
+GO
+
+EXEC FillPointsNulls;
+Go
+
+EXEC FillGoalsNulls;
+GO
+
+EXEC FillGoalsScoredNulls;
 ------------------------------------------------------------------------------------------
 
 
 
 
 ------------------------------------------------------------------------------------------
-CREATE TABLE #ImportPlayers
-(
+CREATE TABLE  #ImportPlayers
+(    
 	 [Name] NVARCHAR(100),
-	 PositionFk int,
-	 CommandFk int
+	 PositionFk INT
 )
 GO
 BULK INSERT #ImportPlayers
@@ -212,13 +258,59 @@ WITH
 	FIELDTERMINATOR = '|',
     ROWTERMINATOR = '\n'
 )
-
-INSERT INTO Players([Name], PositionFk, CommandFk)
-SELECT #ImportPlayers.[Name],  #ImportPlayers.PositionFk, #ImportPlayers.CommandFk
-FROM #ImportPlayers
 GO
 
-DROP TABLE #ImportPlayers
+ALTER TABLE  #ImportPlayers 
+ADD Id INT PRIMARY KEY IDENTITY
+GO
+
+CREATE PROCEDURE FillPlayers 
+AS 
+BEGIN
+	DECLARE @i INT;
+	DECLARE @minIndex INT;
+	DECLARE @maxIndex INT;
+	DECLARE @commandFk INT;
+	DECLARE @position INT;
+
+	DECLARE @name NVARCHAR(30);
+	DECLARE @playerId INT;
+
+	SET @playerId = (SELECT TOP 1 #ImportPlayers.Id FROM #ImportPlayers);
+
+	SET @minIndex = (SELECT TOP 1 Commands.Id FROM Commands)
+	SET @maxIndex = (SELECT MAX(Commands.Id) FROM Commands)
+
+	SET @i = 0;
+
+	WHILE(@i < (SELECT COUNT(*) FROM #ImportPlayers))
+	BEGIN
+		IF @minIndex = @maxIndex + 1
+		BEGIN
+			SET @minIndex = (SELECT TOP 1 Commands.Id FROM Commands)
+		END
+
+		SET @name = (SELECT #ImportPlayers.[Name] FROM #ImportPlayers WHERE #ImportPlayers.Id = @playerId)
+
+		SET @position = (SELECT PositionFk FROM #ImportPlayers WHERE  #ImportPlayers.Id = @playerId);
+
+		SET @commandFk = (@minIndex);
+
+		INSERT INTO Players([Name], PositionFk, CommandFk) VALUES (@name, @position, @commandFk)
+
+		SET @minIndex += 1;
+		SET @playerId += 1;
+
+		SET @i += 1;
+	END
+END
+GO
+
+EXECUTE FillPlayers;
+GO
+
+DROP TABLE #ImportPlayers;
+GO
 ------------------------------------------------------------------------------------------
 
 
@@ -252,25 +344,53 @@ DROP TABLE #ImportAssociations
 ------------------------------------------------------------------------------------------
 CREATE TABLE #ImportJudges
 (
-	 CountryFk int,
-	 [Name] NVARCHAR(100),
-	 AssociationFk int
+	 [Name] NVARCHAR(100)
 )
 GO
 BULK INSERT #ImportJudges
 FROM 'C:\Users\katei\source\repos\sql-homework\10-Exam\TextFiles\Judges.txt'
 WITH 
 ( 
-	FIELDTERMINATOR = '|',
     ROWTERMINATOR = '\n'
 )
-
-SELECT * FROM #ImportJudges
-
-INSERT INTO Judges([Name], AssociationFk, CountryFk)
-SELECT #ImportJudges.[Name],  #ImportJudges.AssociationFk, #ImportJudges.CountryFk
-FROM #ImportJudges
 GO
+
+ALTER TABLE #ImportJudges
+ADD Id INT PRIMARY KEY IDENTITY
+GO
+
+CREATE PROCEDURE FillRndJudges
+AS
+BEGIN
+
+DECLARE @maxIndex INT;
+DECLARE @countryFk INT;
+DECLARE @name NVARCHAR(30);
+DECLARE @assotiationFk INT;
+DECLARE @i INT;
+
+SET @maxIndex = (SELECT MAX(Id) FROM #ImportJudges)
+SET @i = (SELECT TOP 1 Id FROM #ImportJudges)
+
+WHILE(@i <= @maxIndex)
+BEGIN
+
+	SET @countryFk = (SELECT TOP 1 Id FROM Countries ORDER BY NEWID());
+
+	SET @assotiationFk =  (SELECT TOP 1 Id FROM Associations ORDER BY NEWID());
+
+	SET @name = (SELECT #ImportJudges.[Name] FROM #ImportJudges WHERE #ImportJudges.Id = @i) 
+
+	INSERT INTO Judges ([Name], AssociationFk, CountryFk) 
+	VALUES(@name, @assotiationFk, @countryFk);
+
+ 	SET @i +=1;
+END
+
+END
+GO
+
+EXECUTE FillRndJudges
 
 DROP TABLE #ImportJudges
 GO
