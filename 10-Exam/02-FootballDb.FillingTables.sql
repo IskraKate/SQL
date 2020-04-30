@@ -232,10 +232,22 @@ FROM Commands
 END
 GO
 
+CREATE PROCEDURE FillMatchWinsLosesNulls
+AS 
+BEGIN
+INSERT INTO MatchWinLoses(CommandFk, Wins, Loses)
+SELECT Commands.Id, 0, 0
+FROM Commands
+END
+GO
+
 EXEC FillPointsNulls;
 Go
 
 EXEC FillGoalsNulls;
+GO
+
+EXEC FillMatchWinsLosesNulls;
 GO
 
 EXEC FillGoalsScoredNulls;

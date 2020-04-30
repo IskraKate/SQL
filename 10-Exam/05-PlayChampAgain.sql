@@ -1,37 +1,13 @@
 USE FootballChampionship
 GO
 
-CREATE PROCEDURE Replay1s8
+CREATE PROCEDURE ReplayFinal
 AS
 BEGIN
-
-DELETE FROM TopScorers
-WHERE (TopScorers.Match1s8Fk IS NOT NULL) OR
-(TopScorers.Match1s4Fk IS NOT NULL) OR
-(TopScorers.Match1s2Fk IS NOT NULL) OR
-(TopScorers.MatchFinalFk IS NOT NULL)
-
-DELETE FROM Matches1s8;
-
-DELETE FROM Matches1s4;
-
-DELETE FROM Matches1s2;
 
 DELETE FROM MatchesFinal;
 
 DELETE FROM Winners;
-
-EXECUTE Fill1s8Matches;
-
-EXECUTE Play1s8Matches;
-
-EXECUTE Fill1s4Matches;
-
-EXECUTE Play1s4Matches;
-
-EXECUTE Fill1s2Matches;
-
-EXECUTE Play1s2Matches;
 
 EXECUTE FillFinalMatches;
 
@@ -39,10 +15,52 @@ EXECUTE PlayFinalMatches;
 
 EXEC FillWinners;
 
-END 
+END
 GO
 
-EXECUTE Replay1s8;
+CREATE PROCEDURE Replay1s2
+AS
+BEGIN
+
+DELETE FROM Matches1s2;
+
+EXECUTE Fill1s2Matches;
+
+EXECUTE Play1s2Matches;
+
+EXECUTE ReplayFinal;
+
+END
+GO
+
+CREATE PROCEDURE Replay1s4
+AS
+BEGIN
+
+DELETE FROM Matches1s4;
+
+EXECUTE Fill1s4Matches;
+
+EXECUTE Play1s4Matches;
+
+EXECUTE Replay1s2;
+
+END
+GO
+
+CREATE PROCEDURE Replay1s8
+AS
+BEGIN
+
+DELETE FROM Matches1s8;
+
+EXECUTE Fill1s8Matches;
+
+EXECUTE Play1s8Matches;
+
+EXECUTE Replay1s4;
+
+END 
 GO
 ----------------------------------------------------------------------------------------------------
 

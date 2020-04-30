@@ -190,7 +190,7 @@ BEGIN
 
 	SET @minPeople = FLOOR(0.5*(SELECT Stadiums.Capacity FROM Stadiums WHERE Stadiums.Id = @stadiumFk));
 	SET @maxPeople = (SELECT Stadiums.Capacity FROM Stadiums WHERE Stadiums.Id = @stadiumFk)
-	SET @peopleCount = (SELECT FLOOR(RAND(@maxPeople - @minPeople + 1) + @minPeople));
+	SET @peopleCount =  RAND()*(@maxPeople - @minPeople) + @minPeople
 
 	DECLARE @matchType NVARCHAR(10);
 	SET @matchType = 'Group';
@@ -347,6 +347,8 @@ UPDATE GoalsScored
 SET GoalsCount += @command1Goals
 WHERE CommandFk = @commandFk2
 
+
+
 DECLARE @result NVARCHAR(5);
 SET @result = '';
 
@@ -354,20 +356,36 @@ SET @result += CAST(@command1Goals AS NVARCHAR(2)) + ':' + CAST(@command2Goals A
 
 IF(@command1Goals > @command2Goals)
 BEGIN
-INSERT INTO MatchGroupResults(Id, WinnerFk, LooserFk, Result)
-VALUES(@matchId, @commandFk1, @commandFk2, @result)
+	INSERT INTO MatchGroupResults(Id, WinnerFk, LooserFk, Result)
+	VALUES(@matchId, @commandFk1, @commandFk2, @result)
+
+	UPDATE MatchWinLoses
+	SET Wins += 1
+	WHERE CommandFk = @commandFk1
+
+	UPDATE MatchWinLoses
+	SET Loses += 1
+	WHERE CommandFk = @commandFk2
 END
 
 IF(@command2Goals > @command1Goals)
-BEGIN
-INSERT INTO MatchGroupResults(Id, WinnerFk, LooserFk, Result)
-VALUES(@matchId, @commandFk2, @commandFk1, @result)
+	BEGIN
+	INSERT INTO MatchGroupResults(Id, WinnerFk, LooserFk, Result)
+	VALUES(@matchId, @commandFk2, @commandFk1, @result)
+
+	UPDATE MatchWinLoses
+	SET Wins += 1
+	WHERE CommandFk = @commandFk2
+
+	UPDATE MatchWinLoses
+	SET Loses += 1
+	WHERE CommandFk = @commandFk1
 END
 
 If(@command1Goals = @command2Goals)
 BEGIN
-INSERT INTO MatchGroupResults(Id, Result)
-VALUES(@matchId, @result)
+	INSERT INTO MatchGroupResults(Id, Result)
+	VALUES(@matchId, @result)
 END
 
 EXECUTE TopScorersFill @matchId, @commandFk1, @command1Goals, @matchType;
@@ -530,7 +548,7 @@ SET @index = (SELECT TOP 1 Groups.Id FROM Groups);
 
 		SET @minPeople = FLOOR(0.5*(SELECT Stadiums.Capacity FROM Stadiums WHERE Stadiums.Id = @stadiumFk));
 		SET @maxPeople = (SELECT Stadiums.Capacity FROM Stadiums WHERE Stadiums.Id = @stadiumFk)
-		SET @peopleCount = (SELECT FLOOR(RAND(@maxPeople - @minPeople + 1) + @minPeople));
+		SET @peopleCount =  RAND()*(@maxPeople - @minPeople) + @minPeople;
 		
 		SET @schedule = dbo.Get1s8Time(@scheduleIndex);
 
@@ -558,7 +576,7 @@ SET @index = (SELECT TOP 1 Groups.Id FROM Groups);
 
 		SET @minPeople = FLOOR(0.5*(SELECT Stadiums.Capacity FROM Stadiums WHERE Stadiums.Id = @stadiumFk));
 		SET @maxPeople = (SELECT Stadiums.Capacity FROM Stadiums WHERE Stadiums.Id = @stadiumFk)
-		SET @peopleCount = (SELECT FLOOR(RAND(@maxPeople - @minPeople + 1) + @minPeople));
+		SET @peopleCount = RAND()*(@maxPeople - @minPeople) + @minPeople;
 
 		SET @schedule = dbo.Get1s8Time(@scheduleIndex + 1);
 
@@ -613,21 +631,37 @@ SET @result += CAST(@command1Goals AS NVARCHAR(2)) + ':' + CAST(@command2Goals A
 
 IF(@command1Goals > @command2Goals)
 BEGIN
-INSERT INTO Match1s8Results(Id, WinnerFk, LooserFk, Result)
-VALUES(@matchId, @commandFk1, @commandFk2, @result)
+	INSERT INTO Match1s8Results(Id, WinnerFk, LooserFk, Result)
+	VALUES(@matchId, @commandFk1, @commandFk2, @result)
+
+	UPDATE MatchWinLoses
+	SET Wins += 1
+	WHERE CommandFk = @commandFk1
+
+	UPDATE MatchWinLoses
+	SET Loses += 1
+	WHERE CommandFk = @commandFk2
 END
 
 IF(@command2Goals > @command1Goals)
 BEGIN
-INSERT INTO Match1s8Results(Id, WinnerFk, LooserFk, Result)
-VALUES(@matchId, @commandFk2, @commandFk1, @result)
+	INSERT INTO Match1s8Results(Id, WinnerFk, LooserFk, Result)
+	VALUES(@matchId, @commandFk2, @commandFk1, @result)
+
+	UPDATE MatchWinLoses
+	SET Wins += 1
+	WHERE CommandFk = @commandFk2
+
+	UPDATE MatchWinLoses
+	SET Loses += 1
+	WHERE CommandFk = @commandFk1
 END
 
 If(@command1Goals = @command2Goals)
 BEGIN
 
-EXECUTE TopScorersFill @matchId, @commandFk1, @command1Goals, @matchType;
-EXECUTE TopScorersFill @matchId, @commandFk2, @command2Goals, @matchType;
+	EXECUTE TopScorersFill @matchId, @commandFk1, @command1Goals, @matchType;
+	EXECUTE TopScorersFill @matchId, @commandFk2, @command2Goals, @matchType;
 
 EXEC Play1s8 @matchId, @commandFk1, @commandFk2, @matchType;
 END
@@ -734,7 +768,7 @@ BEGIN
 
 		SET @minPeople = FLOOR(0.5*(SELECT Stadiums.Capacity FROM Stadiums WHERE Stadiums.Id = @stadiumFk));
 		SET @maxPeople = (SELECT Stadiums.Capacity FROM Stadiums WHERE Stadiums.Id = @stadiumFk)
-		SET @peopleCount = (SELECT FLOOR(RAND(@maxPeople - @minPeople + 1) + @minPeople));
+		SET @peopleCount = RAND()*(@maxPeople - @minPeople) + @minPeople;
 
 		SET @commandFk1 = (SELECT WinnerFk FROM Match1s8Results WHERE Match1s8Results.Id = @id);
 		SET @commandFk2 = (SELECT WinnerFk FROM Match1s8Results WHERE Match1s8Results.Id = ((@maxId + 1) - @index));
@@ -791,14 +825,30 @@ SET @result += CAST(@command1Goals AS NVARCHAR(2)) + ':' + CAST(@command2Goals A
 
 IF(@command1Goals > @command2Goals)
 BEGIN
-INSERT INTO Match1s4Results(Id, WinnerFk, LooserFk, Result)
-VALUES(@matchId, @commandFk1, @commandFk2, @result)
+	INSERT INTO Match1s4Results(Id, WinnerFk, LooserFk, Result)
+	VALUES(@matchId, @commandFk1, @commandFk2, @result)
+
+	UPDATE MatchWinLoses
+	SET Wins += 1
+	WHERE CommandFk = @commandFk1
+
+	UPDATE MatchWinLoses
+	SET Loses += 1
+	WHERE CommandFk = @commandFk2
 END
 
 IF(@command2Goals > @command1Goals)
 BEGIN
-INSERT INTO Match1s4Results(Id, WinnerFk, LooserFk, Result)
-VALUES(@matchId, @commandFk2, @commandFk1, @result)
+	INSERT INTO Match1s4Results(Id, WinnerFk, LooserFk, Result)
+	VALUES(@matchId, @commandFk2, @commandFk1, @result)
+
+	UPDATE MatchWinLoses
+	SET Wins += 1
+	WHERE CommandFk = @commandFk2
+
+	UPDATE MatchWinLoses
+	SET Loses += 1
+	WHERE CommandFk = @commandFk1
 END
 
 If(@command1Goals = @command2Goals)
@@ -913,7 +963,7 @@ BEGIN
 
 		SET @minPeople = FLOOR(0.5*(SELECT Stadiums.Capacity FROM Stadiums WHERE Stadiums.Id = @stadiumFk));
 		SET @maxPeople = (SELECT Stadiums.Capacity FROM Stadiums WHERE Stadiums.Id = @stadiumFk)
-		SET @peopleCount = (SELECT FLOOR(RAND(@maxPeople - @minPeople + 1) + @minPeople));
+		SET @peopleCount = RAND()*(@maxPeople - @minPeople) + @minPeople;
 
 		SET @commandFk1 = (SELECT WinnerFk FROM Match1s4Results WHERE Match1s4Results.Id = @id);
 		SET @commandFk2 = (SELECT WinnerFk FROM Match1s4Results WHERE Match1s4Results.Id = ((@maxId + 1) - @index));
@@ -970,14 +1020,30 @@ SET @result += CAST(@command1Goals AS NVARCHAR(2)) + ':' + CAST(@command2Goals A
 
 IF(@command1Goals > @command2Goals)
 BEGIN
-INSERT INTO Match1s2Results(Id, WinnerFk, LooserFk, Result)
-VALUES(@matchId, @commandFk1, @commandFk2, @result)
+	INSERT INTO Match1s2Results(Id, WinnerFk, LooserFk, Result)
+	VALUES(@matchId, @commandFk1, @commandFk2, @result)
+
+	UPDATE MatchWinLoses
+	SET Wins += 1
+	WHERE CommandFk = @commandFk1
+
+	UPDATE MatchWinLoses
+	SET Loses += 1
+	WHERE CommandFk = @commandFk2
 END
 
 IF(@command2Goals > @command1Goals)
 BEGIN
-INSERT INTO Match1s2Results(Id, WinnerFk, LooserFk, Result)
-VALUES(@matchId, @commandFk2, @commandFk1, @result)
+	INSERT INTO Match1s2Results(Id, WinnerFk, LooserFk, Result)
+	VALUES(@matchId, @commandFk2, @commandFk1, @result)
+
+	UPDATE MatchWinLoses
+	SET Wins += 1
+	WHERE CommandFk = @commandFk2
+
+	UPDATE MatchWinLoses
+	SET Loses += 1
+	WHERE CommandFk = @commandFk1
 END
 
 If(@command1Goals = @command2Goals)
@@ -1083,7 +1149,7 @@ DECLARE @peopleCount INT;
 
 SET @minPeople = FLOOR(0.5*(SELECT Stadiums.Capacity FROM Stadiums WHERE Stadiums.Id = @stadiumFk));
 SET @maxPeople = (SELECT Stadiums.Capacity FROM Stadiums WHERE Stadiums.Id = @stadiumFk)
-SET @peopleCount = (SELECT FLOOR(RAND(@maxPeople - @minPeople + 1) + @minPeople));
+SET @peopleCount = RAND()*(@maxPeople - @minPeople) + @minPeople;
 
 SET @commandFk1 = (SELECT WinnerFk FROM Match1s2Results WHERE Match1s2Results.Id = @index);
 SET @commandFk2 = (SELECT WinnerFk FROM Match1s2Results WHERE Match1s2Results.Id = @maxIndex);
@@ -1098,7 +1164,7 @@ EXECUTE GetRandIdStadium @stadiumFk OUTPUT;
 
 SET @minPeople = FLOOR(0.5*(SELECT Stadiums.Capacity FROM Stadiums WHERE Stadiums.Id = @stadiumFk));
 SET @maxPeople = (SELECT Stadiums.Capacity FROM Stadiums WHERE Stadiums.Id = @stadiumFk)
-SET @peopleCount = (SELECT FLOOR(RAND(@maxPeople - @minPeople + 1) + @minPeople));
+SET @peopleCount = RAND()*(@maxPeople - @minPeople) + @minPeople;
 
 SET @commandFk1 = (SELECT LooserFk FROM Match1s2Results WHERE Match1s2Results.Id = @index);
 SET @commandFk2 = (SELECT LooserFk FROM Match1s2Results WHERE Match1s2Results.Id = @maxIndex);
@@ -1150,14 +1216,30 @@ SET @result += CAST(@command1Goals AS NVARCHAR(2)) + ':' + CAST(@command2Goals A
 
 IF(@command1Goals > @command2Goals)
 BEGIN
-INSERT INTO MatchFinalResults(Id, WinnerFk, LooserFk, Result)
-VALUES(@matchId, @commandFk1, @commandFk2, @result)
+	INSERT INTO MatchFinalResults(Id, WinnerFk, LooserFk, Result)
+	VALUES(@matchId, @commandFk1, @commandFk2, @result)
+
+	UPDATE MatchWinLoses
+	SET Wins += 1
+	WHERE CommandFk = @commandFk1
+
+	UPDATE MatchWinLoses
+	SET Loses += 1
+	WHERE CommandFk = @commandFk2
 END
 
 IF(@command2Goals > @command1Goals)
 BEGIN
-INSERT INTO MatchFinalResults(Id, WinnerFk, LooserFk, Result)
-VALUES(@matchId, @commandFk2, @commandFk1, @result)
+	INSERT INTO MatchFinalResults(Id, WinnerFk, LooserFk, Result)
+	VALUES(@matchId, @commandFk2, @commandFk1, @result)
+
+	UPDATE MatchWinLoses
+	SET Wins += 1
+	WHERE CommandFk = @commandFk2
+
+	UPDATE MatchWinLoses
+	SET Loses += 1
+	WHERE CommandFk = @commandFk1
 END
 
 If(@command1Goals = @command2Goals)

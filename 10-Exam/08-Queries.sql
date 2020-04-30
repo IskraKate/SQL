@@ -1,6 +1,77 @@
 USE FootballChampionship
 GO
 
+--0. Вывод чемпионата в удобном формате
+------------------------------------------------------------------------------------------
+
+CREATE TABLE #tempOne
+(
+  Id INT PRIMARY KEY IDENTITY,
+  [Name] VARCHAR(100)
+)
+GO
+
+CREATE TABLE #tempTwo
+(
+  Id INT PRIMARY KEY IDENTITY,
+  [Name] VARCHAR(100)
+)
+GO
+
+INSERT INTO #tempOne([Name])
+(SELECT Countries.[Name] AS 'Command One'
+FROM MatchesGroup, Countries, Commands
+WHERE Countries.Id = Commands.CountryFk AND Commands.Id = MatchesGroup.CommandFk1)
+
+INSERT INTO #tempTwo([Name])
+(SELECT Countries.[Name] AS 'Command Two'
+FROM MatchesGroup, Countries, Commands
+WHERE Countries.Id = Commands.CountryFk AND Commands.Id = MatchesGroup.CommandFk2) 
+
+SELECT MatchesGroup.Schedule , #tempOne.[Name] AS 'Command One', #tempTwo.[Name] AS 'Command Two', Judges.[Name] AS 'Judge',
+Stadiums.[Name] AS 'Stadium', Stadiums.Capacity, MatchesGroup.PeopleOnTheStadium AS 'People on the stadium'
+FROM #tempOne, #tempTwo, MatchesGroup, Judges, Stadiums
+WHERE #tempTwo.Id = #tempOne.Id AND MatchesGroup.Id = #tempOne.ID AND MatchesGroup.JudgeFk  = Judges.Id AND MatchesGroup.StadiumFk = Stadiums.Id
+
+DROP TABLE #tempOne
+GO
+
+DROP TABLE #tempTwo
+GO
+
+CREATE TABLE #tempThree
+(
+  Id INT PRIMARY KEY IDENTITY,
+  [Name] VARCHAR(100)
+)
+GO
+
+CREATE TABLE #tempFour
+(
+  Id INT PRIMARY KEY IDENTITY,
+  [Name] VARCHAR(100)
+)
+GO
+
+INSERT INTO #tempThree([Name])
+(SELECT Countries.[Name] AS 'Winner'
+FROM MatchGroupResults, Countries, Commands
+WHERE Countries.Id = Commands.CountryFk AND Commands.Id = MatchGroupResults.WinnerFk)
+
+INSERT INTO #tempFour([Name])
+(SELECT Countries.[Name] AS 'Looser'
+FROM MatchGroupResults, Countries, Commands
+WHERE Countries.Id = Commands.CountryFk AND Commands.Id = MatchGroupResults.LooserFk) 
+
+SELECT #tempThree.[Name] AS 'Winner', #tempFour.[Name] AS 'Looser', Result
+FROM #tempThree, #tempFour, MatchGroupResults
+WHERE #tempThree.Id = #tempFour.Id AND MatchGroupResults.Id = #tempThree.ID 
+
+DROP TABLE #tempThree
+GO
+
+DROP TABLE #tempFour
+GO
 ------------------------------------------------------------------------------------------
 
 
@@ -151,7 +222,7 @@ WHERE Players.Id IN
 
 
 --10. Список команд, занявших призовые места 
--------------------------------------------------------------------------------------------
+------------------------------------------------------------------------------------------
 SELECT t1.[First Place], t2.[Second Place], t3.[Third Place]
 FROM
 (SELECT Countries.[Name] AS [First Place]

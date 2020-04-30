@@ -126,9 +126,9 @@ BEGIN
 						WHERE MatchesGroup.Id = (SELECT MAX (MatchesGroup.Id) FROM MatchesGroup));
 
 	DECLARE @days INT;
-	SET @days = (SELECT FLOOR(RAND()*((10-1)+1)));
+	SET @days = (SELECT FLOOR(RAND()*(10-1)+1));
 
-	SELECT DATEADD(day, @days, @schedule);
+	SET @schedule =  DATEADD(day, @days, @schedule);
 
 	DECLARE @judgeFk INT;
 	DECLARE @stadiumFk INT;
