@@ -1,7 +1,7 @@
 USE FootballChampionship
 GO
 
---0. Вывод чемпионата в удобном формате
+--0. 
 ------------------------------------------------------------------------------------------
 CREATE PROCEDURE CreateTempTables
 AS 
@@ -53,8 +53,6 @@ Stadiums.[Name] AS 'Stadium', Stadiums.Capacity, MatchesGroup.PeopleOnTheStadium
 FROM tempOne, tempTwo, MatchesGroup, Judges, Stadiums
 WHERE tempTwo.Id = tempOne.Id AND MatchesGroup.Id = tempOne.ID AND MatchesGroup.JudgeFk  = Judges.Id AND MatchesGroup.StadiumFk = Stadiums.Id
 
-EXECUTE DeleteFromTempTables;
-
 END
 GO
 
@@ -75,8 +73,6 @@ WHERE Countries.Id = Commands.CountryFk AND Commands.Id = MatchGroupResults.Loos
 SELECT tempOne.[Name] AS 'Winner', tempTwo.[Name] AS 'Looser', Result
 FROM tempOne, tempTwo, MatchGroupResults
 WHERE tempOne.Id = tempTwo.Id AND MatchGroupResults.Id = tempOne.Id
-
-EXECUTE DeleteFromTempTables;
 
 END 
 GO
@@ -260,5 +256,107 @@ FROM Winners, Commands, Countries
 WHERE (Commands.Id = Winners.ThirdPlaceFk AND Commands.CountryFk = Countries.Id)) t3
 
 END
+GO
+--Groups
+-------------------------------------------------------------------------------------------
+EXECUTE CreateTempTables;
+GO
+
+EXECUTE ShowAllMatchesOfGroup;
+GO
+--Results----------------------------------------------------------------------------------
+EXECUTE DropTempTables;
+GO
+
+EXECUTE CreateTempTables;
+GO
+
+EXECUTE ShowResultsOfGroup;
+GO
+-------------------------------------------------------------------------------------------
+
+
+
+--1/8
+-------------------------------------------------------------------------------------------
+EXECUTE DropTempTables;
+GO
+
+EXECUTE CreateTempTables;
+GO
+
+EXECUTE ShowAllMatchesOf1s8;
+GO
+--Results----------------------------------------------------------------------------------
+EXECUTE DropTempTables;
+GO
+
+EXECUTE CreateTempTables;
+GO
+
+EXECUTE ShowResultsOf1s8;
+GO
+-------------------------------------------------------------------------------------------
+
+
+
+--1/4
+-------------------------------------------------------------------------------------------
+EXECUTE DropTempTables;
+GO
+
+EXECUTE CreateTempTables;
+GO
+
+EXECUTE ShowAllMatchesOf1s4;
+GO
+--Results----------------------------------------------------------------------------------
+EXECUTE DropTempTables;
+GO
+
+EXECUTE CreateTempTables;
+GO
+
+EXECUTE ShowResultsOf1s4;
+GO
+-------------------------------------------------------------------------------------------
+
+
+
+--1/2
+-------------------------------------------------------------------------------------------
+EXECUTE DropTempTables;
+GO
+
+EXECUTE CreateTempTables;
+GO
+
+EXECUTE ShowAllMatchesOf1s2;
+GO
+--Results----------------------------------------------------------------------------------
+EXECUTE DropTempTables;
+GO
+
+EXECUTE CreateTempTables;
+GO
+
+EXECUTE ShowResultsOf1s2;
+GO
+-------------------------------------------------------------------------------------------
+
+
+
+--Final
+-------------------------------------------------------------------------------------------
+EXECUTE DropTempTables;
+GO
+
+EXECUTE CreateTempTables;
+GO
+
+EXECUTE ShowAllMatchesOfFinal;
+GO
+--Results----------------------------------------------------------------------------------
+EXECUTE ShowWinners;
 GO
 -------------------------------------------------------------------------------------------

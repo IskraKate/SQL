@@ -1,13 +1,9 @@
 USE FootballChampionship
 GO
 
-------------------------------------------------------------------------------------------
-
-
-
 --1. Общее количество голов, забитых на протяжении чемпионата 
 ------------------------------------------------------------------------------------------
-SELECT (balls.MaxId - balls.MinId)
+SELECT (balls.MaxId - balls.MinId) AS 'All Goals'
 FROM (SELECT TOP 1 Topscorers.Id As MinId, MaxId
 	  FROM (SELECT Max(TopScorers.Id) AS MaxId
 		    FROM TopScorers) b, TopScorers) balls
@@ -17,7 +13,7 @@ FROM (SELECT TOP 1 Topscorers.Id As MinId, MaxId
 
 --2. Среднее количество голов в каждом матче 
 ------------------------------------------------------------------------------------------
-SELECT AVG(ct.cnt)
+SELECT AVG(ct.cnt) AS 'Average goals in match'
 FROM TopScorers, 
 (SELECT COUNT(TopScorers.PlayerFk) AS cnt FROM TopScorers GROUP BY MatchFk, Match1s8Fk, Match1s4Fk, Match1s2Fk, MatchFinalFk) ct 
 ------------------------------------------------------------------------------------------
