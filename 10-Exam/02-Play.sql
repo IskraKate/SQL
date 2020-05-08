@@ -327,7 +327,8 @@ BEGIN
 
     DECLARE @command1Goals INT;
 	DECLARE @command2Goals INT;
-	DECLARE @result NVARCHAR(10);
+	DECLARE @resultW INT;
+	DECLARE @resultL INT;
 	DECLARE @matchId INT;
 
 	SET @command1Goals = (SELECT FLOOR(RAND()*5));
@@ -349,27 +350,36 @@ BEGIN
 	SET GoalsCount += @command1Goals
 	WHERE CommandFk = @commandFk2
 
-	SET @result = '';
-	SET @result += CAST(@command1Goals AS NVARCHAR(2)) + ':' + CAST(@command2Goals AS NVARCHAR(2));
-
 	SET @matchId = (SELECT MAX(MatchesGroup.Id) FROM MatchesGroup)
 
 	IF(@command1Goals > @command2Goals)
 	BEGIN
-	INSERT INTO MatchGroupResults(Id, WinnerFk, LooserFk, Result)
-	VALUES(@matchId, @commandFk1, @commandFk2, @result)
+
+	SET @resultW = @command1Goals;
+	SET @resultL = @command2Goals;
+
+	INSERT INTO MatchGroupResults(Id, WinnerFk, LooserFk, ResultW, ResultL)
+	VALUES(@matchId, @commandFk1, @commandFk2, @resultW, @resultL)
 	END
 
 	IF(@command2Goals > @command1Goals)
 	BEGIN
-	INSERT INTO MatchGroupResults(Id, WinnerFk, LooserFk, Result)
-	VALUES(@matchId, @commandFk2, @commandFk1, @result)
+
+	SET @resultW = @command2Goals;
+	SET @resultL = @command1Goals;
+
+	INSERT INTO MatchGroupResults(Id, WinnerFk, LooserFk, ResultW, ResultL)
+	VALUES(@matchId, @commandFk1, @commandFk2, @resultW, @resultL)
 	END
 
 	If(@command1Goals = @command2Goals)
 	BEGIN
-	INSERT INTO MatchGroupResults(Id, Result)
-	VALUES(@matchId, @result)
+
+	SET @resultW = @command2Goals;
+	SET @resultL = @command1Goals;
+
+	INSERT INTO MatchGroupResults(Id, WinnerFk, LooserFk, ResultW, ResultL)
+	VALUES(@matchId, @commandFk1, @commandFk2, @resultW, @resultL)
 	END
 
 	EXECUTE TopScorersFill @matchId, @commandFk1, @command1Goals, @matchType;
@@ -387,12 +397,23 @@ CREATE PROCEDURE CountMatchPointsReplay
 AS
 
 DECLARE @commandFk INT;
+DECLARE @result1 INT;
+DECLARE @result2 INT;
+
+SET @result1 =   (SELECT MatchGroupResults.ResultW 
+				  FROM MatchGroupResults
+				  WHERE MatchGroupResults.Id = (SELECT MAX(MatchesGroup.Id) FROM MatchesGroup))	
+
+
+SET @result2 =   (SELECT MatchGroupResults.ResultL 
+				  FROM MatchGroupResults
+				  WHERE MatchGroupResults.Id = (SELECT MAX(MatchesGroup.Id) FROM MatchesGroup))	
 
 SET @commandFk = (SELECT MatchGroupResults.LooserFk 
 				  FROM MatchGroupResults
 				  WHERE MatchGroupResults.Id = (SELECT MAX(MatchesGroup.Id) FROM MatchesGroup))	
 
-IF(@commandFk IS NOT NULL)
+IF(@result1 != @result2)
 BEGIN
 
 	UPDATE Points 
@@ -674,15 +695,17 @@ WHERE CommandFk = @commandFk2
 
 
 
-DECLARE @result NVARCHAR(5);
-SET @result = '';
-
-SET @result += CAST(@command1Goals AS NVARCHAR(2)) + ':' + CAST(@command2Goals AS NVARCHAR(2));
+DECLARE @resultW INT;
+DECLARE @resultL INT;
 
 IF(@command1Goals > @command2Goals)
 BEGIN
-	INSERT INTO MatchGroupResults(Id, WinnerFk, LooserFk, Result)
-	VALUES(@matchId, @commandFk1, @commandFk2, @result)
+	
+	SET @resultW = @command1Goals;
+	SET @resultL = @command2Goals;
+	
+	INSERT INTO MatchGroupResults(Id, WinnerFk, LooserFk, ResultW, ResultL)
+	VALUES(@matchId, @commandFk1, @commandFk2, @resultW, @resultL)
 
 	UPDATE MatchWinLoses
 	SET Wins += 1
@@ -695,8 +718,12 @@ END
 
 IF(@command2Goals > @command1Goals)
 	BEGIN
-	INSERT INTO MatchGroupResults(Id, WinnerFk, LooserFk, Result)
-	VALUES(@matchId, @commandFk2, @commandFk1, @result)
+
+	SET @resultW = @command2Goals;
+	SET @resultL = @command1Goals;
+
+	INSERT INTO MatchGroupResults(Id, WinnerFk, LooserFk, ResultW, ResultL)
+	VALUES(@matchId, @commandFk2, @commandFk1, @resultW, @resultL)
 
 	UPDATE MatchWinLoses
 	SET Wins += 1
@@ -709,8 +736,11 @@ END
 
 If(@command1Goals = @command2Goals)
 BEGIN
-	INSERT INTO MatchGroupResults(Id, Result)
-	VALUES(@matchId, @result)
+	SET @resultW = @command2Goals;
+	SET @resultL = @command1Goals;
+
+	INSERT INTO MatchGroupResults(Id, WinnerFk, LooserFk, ResultW, ResultL)
+	VALUES(@matchId, @commandFk2, @commandFk1, @resultW, @resultL)
 END
 
 EXECUTE TopScorersFill @matchId, @commandFk1, @command1Goals, @matchType;
@@ -764,7 +794,8 @@ DECLARE @commandFk INT;
 SET @index = (SELECT TOP 1 MatchGroupResults.Id FROM MatchGroupResults);
 WHILE @index < (SELECT MAX(MatchGroupResults.Id) FROM MatchGroupResults)
 	BEGIN
-		IF((SELECT MatchGroupResults.LooserFk FROM MatchGroupResults WHERE MatchGroupResults.Id = @index) IS NOT NULL)
+		IF((SELECT MatchGroupResults.ResultW FROM MatchGroupResults WHERE MatchGroupResults.Id = @index) != 
+		  (SELECT MatchGroupResults.ResultL FROM MatchGroupResults WHERE MatchGroupResults.Id = @index))
 		BEGIN
 			SET @commandFk = (SELECT MatchGroupResults.LooserFk FROM MatchGroupResults WHERE MatchGroupResults.Id = @index)
 
@@ -949,15 +980,17 @@ UPDATE GoalsScored
 SET GoalsCount += @command1Goals
 WHERE CommandFk = @commandFk2
 
-DECLARE @result NVARCHAR(5);
-SET @result = '';
-
-SET @result += CAST(@command1Goals AS NVARCHAR(2)) + ':' + CAST(@command2Goals AS NVARCHAR(2));
+DECLARE @resultL INT;
+DECLARE @resultW INT;
 
 IF(@command1Goals > @command2Goals)
 BEGIN
-	INSERT INTO Match1s8Results(Id, WinnerFk, LooserFk, Result)
-	VALUES(@matchId, @commandFk1, @commandFk2, @result)
+
+	SET @resultW = @command1Goals;
+	SET @resultL = @command2Goals;
+
+	INSERT INTO Match1s8Results(Id, WinnerFk, LooserFk, ResultW, ResultL)
+	VALUES(@matchId, @commandFk1, @commandFk2, @resultW, @resultL)
 
 	UPDATE MatchWinLoses
 	SET Wins += 1
@@ -970,8 +1003,12 @@ END
 
 IF(@command2Goals > @command1Goals)
 BEGIN
-	INSERT INTO Match1s8Results(Id, WinnerFk, LooserFk, Result)
-	VALUES(@matchId, @commandFk2, @commandFk1, @result)
+
+	SET @resultW = @command2Goals;
+	SET @resultL = @command1Goals;
+
+	INSERT INTO Match1s8Results(Id, WinnerFk, LooserFk, ResultW, ResultL)
+	VALUES(@matchId, @commandFk1, @commandFk2, @resultW, @resultL)
 
 	UPDATE MatchWinLoses
 	SET Wins += 1
@@ -1143,15 +1180,17 @@ UPDATE GoalsScored
 SET GoalsCount += @command1Goals
 WHERE CommandFk = @commandFk2
 	
-DECLARE @result NVARCHAR(5);
-SET @result = '';
-
-SET @result += CAST(@command1Goals AS NVARCHAR(2)) + ':' + CAST(@command2Goals AS NVARCHAR(2));
+DECLARE @resultL INT;
+DECLARE @resultW INT;
 
 IF(@command1Goals > @command2Goals)
 BEGIN
-	INSERT INTO Match1s4Results(Id, WinnerFk, LooserFk, Result)
-	VALUES(@matchId, @commandFk1, @commandFk2, @result)
+
+	SET @resultW = @command1Goals;
+	SET @resultL = @command2Goals;
+
+	INSERT INTO Match1s4Results(Id, WinnerFk, LooserFk, ResultW, ResultL)
+	VALUES(@matchId, @commandFk1, @commandFk2, @resultW, @resultL)
 
 	UPDATE MatchWinLoses
 	SET Wins += 1
@@ -1164,8 +1203,12 @@ END
 
 IF(@command2Goals > @command1Goals)
 BEGIN
-	INSERT INTO Match1s4Results(Id, WinnerFk, LooserFk, Result)
-	VALUES(@matchId, @commandFk2, @commandFk1, @result)
+
+	SET @resultW = @command2Goals;
+	SET @resultL = @command1Goals;
+
+	INSERT INTO Match1s4Results(Id, WinnerFk, LooserFk, ResultW, ResultL)
+	VALUES(@matchId, @commandFk1, @commandFk2, @resultW, @resultL)
 
 	UPDATE MatchWinLoses
 	SET Wins += 1
@@ -1338,15 +1381,17 @@ UPDATE GoalsScored
 SET GoalsCount += @command1Goals
 WHERE CommandFk = @commandFk2
 
-DECLARE @result NVARCHAR(5);
-SET @result = '';
-
-SET @result += CAST(@command1Goals AS NVARCHAR(2)) + ':' + CAST(@command2Goals AS NVARCHAR(2));
+DECLARE @resultL INT;
+DECLARE @resultW INT;
 
 IF(@command1Goals > @command2Goals)
 BEGIN
-	INSERT INTO Match1s2Results(Id, WinnerFk, LooserFk, Result)
-	VALUES(@matchId, @commandFk1, @commandFk2, @result)
+
+	SET @resultW = @command1Goals;
+	SET @resultL = @command2Goals;
+
+	INSERT INTO Match1s2Results(Id, WinnerFk, LooserFk, ResultW, ResultL)
+	VALUES(@matchId, @commandFk1, @commandFk2, @resultW, @resultL)
 
 	UPDATE MatchWinLoses
 	SET Wins += 1
@@ -1359,8 +1404,12 @@ END
 
 IF(@command2Goals > @command1Goals)
 BEGIN
-	INSERT INTO Match1s2Results(Id, WinnerFk, LooserFk, Result)
-	VALUES(@matchId, @commandFk2, @commandFk1, @result)
+
+	SET @resultW = @command2Goals;
+	SET @resultL = @command1Goals;
+
+	INSERT INTO Match1s2Results(Id, WinnerFk, LooserFk, ResultW, ResultL)
+	VALUES(@matchId, @commandFk1, @commandFk2, @resultW, @resultL)
 
 	UPDATE MatchWinLoses
 	SET Wins += 1
@@ -1537,12 +1586,17 @@ WHERE CommandFk = @commandFk2
 DECLARE @result NVARCHAR(5);
 SET @result = '';
 
-SET @result += CAST(@command1Goals AS NVARCHAR(2)) + ':' + CAST(@command2Goals AS NVARCHAR(2));
+DECLARE @resultL INT;
+DECLARE @resultW INT;
 
 IF(@command1Goals > @command2Goals)
 BEGIN
-	INSERT INTO MatchFinalResults(Id, WinnerFk, LooserFk, Result)
-	VALUES(@matchId, @commandFk1, @commandFk2, @result)
+
+	SET @resultW = @command1Goals;
+	SET @resultL = @command2Goals;
+
+	INSERT INTO MatchFinalResults(Id, WinnerFk, LooserFk, ResultW, ResultL)
+	VALUES(@matchId, @commandFk1, @commandFk2, @resultW, @resultL)
 
 	UPDATE MatchWinLoses
 	SET Wins += 1
@@ -1555,8 +1609,12 @@ END
 
 IF(@command2Goals > @command1Goals)
 BEGIN
-	INSERT INTO MatchFinalResults(Id, WinnerFk, LooserFk, Result)
-	VALUES(@matchId, @commandFk2, @commandFk1, @result)
+
+	SET @resultW = @command2Goals;
+	SET @resultL = @command1Goals;
+
+	INSERT INTO MatchFinalResults(Id, WinnerFk, LooserFk, ResultW, ResultL)
+	VALUES(@matchId, @commandFk1, @commandFk2, @resultW, @resultL)
 
 	UPDATE MatchWinLoses
 	SET Wins += 1

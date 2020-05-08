@@ -343,7 +343,8 @@ CREATE TABLE MatchGroupResults
 	Id INT PRIMARY KEY NOT NULL,
 	WinnerFk INT NULL,
 	LooserFk INT NULL,
-	Result NVARCHAR(10) NULL,
+	ResultW INT NULL,
+	ResultL INT NULL,
 
 	FOREIGN KEY (Id) REFERENCES MatchesGroup(Id)
 	ON DELETE CASCADE
@@ -362,7 +363,8 @@ CREATE TABLE Match1s8Results
 	Id INT PRIMARY KEY NOT NULL,
 	WinnerFk INT NULL,
 	LooserFk INT NULL,
-	Result NVARCHAR(10) NULL,
+	ResultW INT NULL,
+	ResultL INT NULL,
 
 	FOREIGN KEY (Id) REFERENCES Matches1s8(Id)
 	ON DELETE CASCADE
@@ -381,7 +383,8 @@ CREATE TABLE Match1s4Results
 	Id INT PRIMARY KEY NOT NULL,
 	WinnerFk INT NULL,
 	LooserFk INT NULL,
-	Result NVARCHAR(10) NULL,
+	ResultW INT NULL,
+	ResultL INT NULL,
 
 	FOREIGN KEY (Id) REFERENCES Matches1s4(Id)
 	ON DELETE CASCADE
@@ -400,7 +403,8 @@ CREATE TABLE Match1s2Results
 	Id INT PRIMARY KEY NOT NULL,
 	WinnerFk INT NULL,
 	LooserFk INT NULL,
-	Result NVARCHAR(10) NULL,
+	ResultW INT NULL,
+	ResultL INT NULL,
 
 	FOREIGN KEY (Id) REFERENCES Matches1s2(Id)
 	ON DELETE CASCADE
@@ -419,7 +423,8 @@ CREATE TABLE MatchFinalResults
 	Id INT PRIMARY KEY NOT NULL,
 	WinnerFk INT NULL,
 	LooserFk INT NULL,
-	Result NVARCHAR(10) NULL,
+	ResultW INT NULL,
+	ResultL INT NULL,
 
 	FOREIGN KEY (Id) REFERENCES MatchesFinal(Id)
 	ON DELETE CASCADE
@@ -608,7 +613,7 @@ DECLARE @maxIndex INT;
 SET @maxIndex = (SELECT MAX(#ImportTrainers.Id) FROM #ImportTrainers)
 
 
-WHILE(@index <  @maxIndex)
+WHILE(@index <  @maxIndex + 1)
 BEGIN
 	 
     INSERT INTO Trainers([Name], CountryFk, CountryChampFk)
@@ -692,18 +697,20 @@ AS
 BEGIN
 
 DECLARE @index INT;
-SET @index = 32
+SET @index = 32;
 
 WHILE(@index >  0)
 BEGIN
+	
 	INSERT INTO Commands(CountryFk, TrainerFk, EquipmentFk)
-	SELECT t1.Country, t1.Trainer, t2.Equipment
-	FROM (SELECT Trainers.CountryFk AS Country, t.trn AS Trainer
-		  FROM Trainers, (SELECT TOP 1 Trainers.Id trn 
-						  FROM Trainers		
-						  ORDER BY NEWID())t  
-		  WHERE Trainers.Id = t.trn) t1,
-		 (SELECT TOP 1 Equipment.Id AS Equipment FROM Equipment ORDER BY NEWID()) t2
+	SELECT t.ctry, t.trn, t1.Equipment
+	FROM (SELECT Trainers.Id trn , Trainers.CountryChampFk ctry
+		  FROM Trainers		
+		  WHERE Trainers.Id = @index)t,
+		
+		 (SELECT TOP 1 Equipment.Id AS Equipment 
+		  FROM Equipment 
+		  ORDER BY NEWID()) t1
 	SET @index -=1;
 END
 
