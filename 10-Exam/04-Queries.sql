@@ -132,16 +132,19 @@ GROUP BY CommandFk, Countries.[Name]
 
 --9. Лучшие бомбардиры (игроки, забившие наибольшее количество голов) 
 -------------------------------------------------------------------------------------------
-SELECT Players.[Name] AS 'Top Scorers'
-FROM Players
+SELECT Players.[Name] AS 'Top Scorers' , t.[Max Goals]
+FROM Players, (SELECT MAX(t1.cnt) AS 'Max Goals'
+			   FROM(SELECT COUNT(PlayerFk) AS cnt, PlayerFk  
+					FROM TopScorers 
+					GROUP BY PlayerFk) t1)t
 WHERE Players.Id IN
 					(SELECT TopScorers.PlayerFk
 					 FROM TopScorers
 					 GROUP BY PlayerFk
 					 HAVING COUNT(TopScorers.PlayerFk) = (SELECT MAX(t1.cnt) 
 														  FROM(SELECT COUNT(PlayerFk) AS cnt, PlayerFk  
-														  FROM TopScorers 
-									                      GROUP BY PlayerFk) t1))
+															   FROM TopScorers 
+									                           GROUP BY PlayerFk) t1)) 
 -------------------------------------------------------------------------------------------
 
 
